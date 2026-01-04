@@ -2,152 +2,109 @@
 
 import Link from "next/link";
 import { useResponsive } from "@/hooks/useResponsive";
+import { gradientFooter } from "@/lib/colors";
 
 export default function Footer() {
   const { isMobile, isTablet } = useResponsive();
 
-  // 회사 정보 (수정 가능)
-  const companyInfo = {
-    name: "회사명",
-    representative: "대표자명",
-    businessNumber: "사업자 등록번호",
-    email: "이메일",
-    address: "주소",
-    domain: "도메인",
-  };
-
-  // AI·데이터 활용 고지 (수정 가능)
-  const aiNotice = {
-    title: "AI·데이터 활용 고지",
-    content:
-      "AI 분석 결과는 마케팅 전략 수립을 위한 참고 자료로 활용되며, 최종 판단과 실행은 전문 마케터의 검토를 통해 이루어집니다. 분석 과정에 활용되는 데이터는 내부 기준에 따라 관리되며, 외부에 무단 제공되지 않습니다.",
-  };
-
-  // 네비게이션 링크 (수정 가능)
+  // 네비게이션 링크
   const navLinks = [
     { label: "ABOUT", href: "/about" },
-    { label: "PORTFOLIO", href: "/portfolio" },
-    { label: "SERVICE", href: "/service" },
+    { label: "APPLY", href: "/apply" },
     { label: "CONTACT", href: "/contact" },
-    { label: "PRIVACY", href: "/privacy" },
   ];
 
   return (
-    <footer className="bg-gray-50 border-t border-gray-200">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* 상단 섹션 */}
-        <div
-          className={`py-8 sm:py-10 lg:py-12 ${
-            isMobile ? "space-y-6" : "grid grid-cols-1 lg:grid-cols-2 gap-8"
-          }`}
-        >
-          {/* 왼쪽: 로고 및 회사명 */}
-          <div className={isMobile ? "text-center" : ""}>
-            <div className="flex items-center gap-3 mb-4">
-              {/* 로고 영역 - 이미지로 교체 가능 */}
-              <div className="w-12 h-12 bg-navy-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">로고</span>
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-navy-900">회사명</h2>
-                <p className="text-sm text-navy-600">부제목</p>
-              </div>
-            </div>
-          </div>
+    <footer className="relative overflow-hidden">
+      {/* 그라데이션 배경 */}
+      <div
+        className="absolute inset-0 opacity-90"
+        style={{ background: gradientFooter }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-navy-800/50 to-gray-300/30 animate-pulse" />
+      </div>
 
-          {/* 오른쪽: 회사 정보 */}
-          <div className={isMobile ? "space-y-3" : "space-y-2"}>
-            <div
-              className={`text-navy-700 ${isMobile ? "text-sm" : "text-base"}`}
-            >
-              <div className="flex flex-wrap gap-x-4 gap-y-1">
-                <span>
-                  <strong>회사명:</strong> {companyInfo.name}
-                </span>
-                <span>
-                  <strong>대표자명:</strong> {companyInfo.representative}
-                </span>
-              </div>
-            </div>
-            <div
-              className={`text-navy-700 ${isMobile ? "text-sm" : "text-base"}`}
-            >
-              <div className="flex flex-wrap gap-x-4 gap-y-1">
-                <span>
-                  <strong>사업자 등록번호:</strong> {companyInfo.businessNumber}
-                </span>
-                <span>
-                  <strong>이메일:</strong>{" "}
-                  <a
-                    href={`mailto:${companyInfo.email}`}
-                    className="text-navy-600 hover:text-navy-900 underline"
-                  >
-                    {companyInfo.email}
-                  </a>
-                </span>
-              </div>
-            </div>
-            <div
-              className={`text-navy-700 ${isMobile ? "text-sm" : "text-base"}`}
-            >
-              <div>
-                <strong>주소:</strong> {companyInfo.address}
-              </div>
-            </div>
-            <div
-              className={`text-navy-700 ${isMobile ? "text-sm" : "text-base"}`}
-            >
-              <div>
-                <strong>도메인:</strong>{" "}
-                <a
-                  href={`https://${companyInfo.domain}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-navy-600 hover:text-navy-900 underline"
-                >
-                  {companyInfo.domain}
-                </a>
-              </div>
-            </div>
-          </div>
+      {/* 디자인 패턴 */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* 대각선 그리드 패턴 */}
+        <div className="absolute inset-0 opacity-10">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 20px,
+                rgba(255, 255, 255, 0.1) 20px,
+                rgba(255, 255, 255, 0.1) 40px
+              )`,
+            }}
+          />
         </div>
 
-        {/* AI·데이터 활용 고지 섹션 */}
-        <div
-          className={`border-t border-gray-200 pt-6 sm:pt-8 ${
-            isMobile ? "pb-6" : "pb-8"
-          }`}
-        >
-          <h3
-            className={`font-semibold text-navy-900 mb-3 ${
-              isMobile ? "text-base" : "text-lg"
-            }`}
-          >
-            {aiNotice.title}
-          </h3>
-          <p
-            className={`text-navy-600 leading-relaxed ${
-              isMobile ? "text-xs sm:text-sm" : "text-sm sm:text-base"
-            }`}
-          >
-            {aiNotice.content}
-          </p>
+        {/* 원형 패턴 */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-10 left-10 w-32 h-32 rounded-full border border-white/20" />
+          <div className="absolute top-20 right-20 w-24 h-24 rounded-full border border-white/20" />
+          <div className="absolute bottom-20 left-1/4 w-40 h-40 rounded-full border border-white/20" />
+          <div className="absolute bottom-10 right-1/4 w-28 h-28 rounded-full border border-white/20" />
+        </div>
+
+        {/* 점 패턴 */}
+        <div className="absolute inset-0 opacity-10">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle, rgba(255, 255, 255, 0.2) 1px, transparent 1px)`,
+              backgroundSize: "24px 24px",
+            }}
+          />
+        </div>
+
+        {/* 애니메이션 라인 */}
+        <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent transform -translate-y-1/2 animate-pulse" />
+        <div className="absolute top-1/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent transform -translate-y-1/2" />
+        <div className="absolute top-2/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent transform -translate-y-1/2" />
+      </div>
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* 콜라보 섹션 - 이미지 제거, 텍스트만 */}
+        <div className={`${isMobile ? "py-8" : "py-10"}`}>
+          <div className="flex flex-col items-center justify-center space-y-4">
+            {/* 콜라보 텍스트 */}
+            <div className="text-center space-y-2">
+              <p
+                className={`text-white font-bold ${
+                  isMobile ? "text-lg" : isTablet ? "text-xl" : "text-2xl"
+                }`}
+              >
+                COW × 학생회
+              </p>
+              <p
+                className={`text-white/80 ${
+                  isMobile ? "text-sm" : "text-base"
+                }`}
+              >
+                융합소프트웨어 비상대책위원회
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* 하단: 네비게이션 및 저작권 */}
         <div
-          className={`border-t border-gray-200 ${isMobile ? "py-4" : "py-6"}`}
+          className={`border-t border-white/10 ${isMobile ? "py-3" : "py-4"}`}
         >
           <div
             className={`flex flex-col ${
               isMobile
-                ? "space-y-4"
+                ? "space-y-3 items-center"
                 : "sm:flex-row sm:justify-between sm:items-center"
             }`}
           >
             {/* 네비게이션 링크 */}
             <nav
-              className={`flex flex-wrap gap-4 sm:gap-6 ${
+              className={`flex flex-wrap gap-3 sm:gap-4 ${
                 isMobile ? "justify-center" : ""
               }`}
             >
@@ -155,8 +112,8 @@ export default function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`text-navy-700 hover:text-navy-900 transition-colors ${
-                    isMobile ? "text-sm" : "text-base"
+                  className={`text-white/70 hover:text-white transition-colors ${
+                    isMobile ? "text-xs sm:text-sm" : "text-sm"
                   }`}
                 >
                   {link.label}
@@ -166,13 +123,11 @@ export default function Footer() {
 
             {/* 저작권 정보 */}
             <div
-              className={`text-navy-600 ${
-                isMobile
-                  ? "text-center text-xs sm:text-sm"
-                  : "text-sm sm:text-base"
+              className={`text-white/60 ${
+                isMobile ? "text-center text-xs" : "text-xs sm:text-sm"
               }`}
             >
-              © {new Date().getFullYear()} 회사명. All Rights Reserved.
+              © {new Date().getFullYear()} COW
             </div>
           </div>
         </div>
