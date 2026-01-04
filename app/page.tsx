@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import ActivityCarousel from "@/components/ui/activity-carousel";
 import { useResponsive } from "@/hooks/useResponsive";
+import { gradientFooter } from "@/lib/colors";
+import type { ActivityImage } from "@/components/ui/activity-carousel";
 import {
   ArrowRight,
   Users,
@@ -63,10 +66,57 @@ export default function Home() {
     { value: "2026", label: "신입부원 모집" },
   ];
 
+  // 활동사진 데이터
+  const activityImages: ActivityImage[] = [
+    {
+      id: "1",
+      src: "/KakaoTalk_Photo_2026-01-04-18-21-31 001.jpeg",
+      alt: "비대위 활동 사진 1",
+    },
+    {
+      id: "2",
+      src: "/KakaoTalk_Photo_2026-01-04-18-21-32 002.jpeg",
+      alt: "비대위 활동 사진 2",
+    },
+    {
+      id: "3",
+      src: "/KakaoTalk_Photo_2026-01-04-18-21-32 003.jpeg",
+      alt: "비대위 활동 사진 3",
+    },
+    {
+      id: "4",
+      src: "/KakaoTalk_Photo_2026-01-04-18-21-33 004.jpeg",
+      alt: "비대위 활동 사진 4",
+    },
+    {
+      id: "5",
+      src: "/KakaoTalk_Photo_2026-01-04-18-21-33 005.jpeg",
+      alt: "비대위 활동 사진 5",
+    },
+    {
+      id: "6",
+      src: "/KakaoTalk_Photo_2026-01-04-18-21-34 006.jpeg",
+      alt: "비대위 활동 사진 6",
+    },
+    {
+      id: "7",
+      src: "/KakaoTalk_Photo_2026-01-04-18-21-34 007.jpeg",
+      alt: "비대위 활동 사진 7",
+    },
+  ];
+
   return (
     <>
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center bg-gradient-hero overflow-hidden">
+        {/* Footer 스타일 그라데이션 배경 추가 */}
+        <div
+          className="absolute inset-0 opacity-90"
+          style={{ background: gradientFooter }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-navy-800/50 to-gray-300/30 animate-pulse" />
+        </div>
+
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div
@@ -214,11 +264,20 @@ export default function Home() {
 
         {/* Scroll Indicator */}
         {!isMobile && (
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-            <div className="w-6 h-10 border-2 border-white/40 rounded-full flex items-start justify-center p-2 backdrop-blur-sm">
-              <div className="w-1.5 h-3 bg-gold-500 rounded-full" />
+          <button
+            onClick={() => {
+              window.scrollTo({
+                top: document.documentElement.scrollHeight,
+                behavior: "smooth",
+              });
+            }}
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer hover:scale-110 transition-transform duration-200 z-20 group"
+            aria-label="페이지 하단으로 스크롤"
+          >
+            <div className="w-6 h-10 border-2 border-white/40 rounded-full flex items-start justify-center p-2 backdrop-blur-sm group-hover:border-white/60 transition-colors">
+              <div className="w-1.5 h-3 bg-gold-500 rounded-full group-hover:bg-gold-400 transition-colors" />
             </div>
-          </div>
+          </button>
         )}
       </section>
 
@@ -259,6 +318,30 @@ export default function Home() {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Activity Carousel Section */}
+      <section
+        className={`bg-gradient-to-b from-navy-800 to-navy-900 border-b border-navy-700 ${
+          isMobile ? "py-12" : isTablet ? "py-16" : "py-20"
+        }`}
+      >
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto">
+            <h2
+              className={`text-center font-bold text-white mb-6 sm:mb-8 ${
+                isMobile ? "text-2xl sm:text-3xl" : "text-3xl sm:text-4xl"
+              }`}
+            >
+              활동 사진
+            </h2>
+            <ActivityCarousel
+              images={activityImages}
+              autoPlay={true}
+              autoPlayInterval={4000}
+            />
           </div>
         </div>
       </section>
@@ -382,7 +465,7 @@ export default function Home() {
       {/* CTA Section */}
       <section
         className={`bg-gradient-navy relative overflow-hidden ${
-          isMobile ? "py-16" : isTablet ? "py-20" : "py-24"
+          isMobile ? "py-12" : isTablet ? "py-16" : "py-20"
         }`}
       >
         <div className="absolute inset-0 opacity-20">
