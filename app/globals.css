@@ -4,19 +4,49 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1a237e;
+  --primary: #283593;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #1a237e;
+  --muted: #f5f5f5;
+  --muted-foreground: #6b7280;
+  --accent: #e8eaf6;
+  --accent-foreground: #283593;
+  --card: #ffffff;
+  --card-foreground: #1a237e;
+  --border: #e5e7eb;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0f172a;
+    --foreground: #f1f5f9;
+    --primary: #3949ab;
+    --primary-foreground: #ffffff;
+    --secondary: #1e293b;
+    --secondary-foreground: #f1f5f9;
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    --accent: #1e293b;
+    --accent-foreground: #f1f5f9;
+    --card: #1e293b;
+    --card-foreground: #f1f5f9;
+    --border: #334155;
   }
 }
 
 body {
   color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 50%, #f0f2f5 100%);
+  font-family: var(--font-pretendard), -apple-system, BlinkMacSystemFont,
+    system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
+    "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+
+@layer utilities {
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-gold-500 to-gold-600 bg-clip-text text-transparent;
+  }
 }
 
