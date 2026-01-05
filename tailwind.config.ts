@@ -63,9 +63,12 @@ const config: Config = {
         pretendard: ["var(--font-pretendard)", "sans-serif"],
       },
       backgroundImage: {
-        "gradient-hero": "linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%)",
+        "gradient-hero":
+          "linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%)",
         "gradient-navy": "linear-gradient(135deg, #283593 0%, #3949ab 100%)",
         "gradient-gold": "linear-gradient(135deg, #ffc107 0%, #ffb300 100%)",
+        "gradient-footer":
+          "linear-gradient(to bottom right, #1a237e 0%, #283593 30%, #3949ab 60%, #5c6bc0 100%)",
       },
       animation: {
         "fade-up": "fadeUp 0.6s ease-out forwards",
@@ -96,4 +99,3 @@ const config: Config = {
   plugins: [],
 };
 export default config;
-
