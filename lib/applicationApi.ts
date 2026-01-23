@@ -3,7 +3,10 @@
 import type { AxiosError } from 'axios';
 import apiClient from './axiosInstance';
 
-// 활성 폼 조회 응답
+// ============================================================================
+// 타입 정의
+// ============================================================================
+
 export interface ActiveFormResponse {
   formId: number;
   title: string;
@@ -19,12 +22,11 @@ export interface FormQuestion {
   required: boolean;
 }
 
-// 지원서 제출 요청
 export interface ApplicationSubmitRequest {
   name: string;
   studentNo: string;
   major: string; // 'CONVERGENCE_SOFTWARE' 등
-  grade: string; // 'GRADE_1', 'GRADE_2', 'GRADE_3', 'GRADE_4' 등
+  grade: string; // 'GRADE_1' | 'GRADE_2' | 'GRADE_3' | 'GRADE_4'
   phone: string;
   answers: ApplicationAnswer[];
 }
@@ -34,40 +36,75 @@ export interface ApplicationAnswer {
   value: string;
 }
 
-// 지원서 제출 응답
 export interface ApplicationSubmitResponse {
   applicationId: number;
-  resultCode: string; // 결과 조회용 코드 (예: "A7K9")
+  resultCode: string;
 }
 
-// 지원 결과 조회 요청 (resultCode 사용)
 export interface ApplicationResultRequest {
   resultCode: string;
 }
 
-// 지원 결과 조회 응답
 export interface ApplicationResultResponse {
   applicationId: number;
-  status?: string; // 'PENDING', 'ACCEPTED', 'REJECTED' 등
-  result?: string; // 결과 메시지
+  status?: string; // 'PENDING' | 'ACCEPTED' | 'REJECTED'
+  result?: string;
   [key: string]: unknown;
 }
 
-// 활성 폼 조회
+// ============================================================================
+// API 함수
+// ============================================================================
+
+/**
+ * 활성화된 모집 폼 조회
+ * @returns 활성 폼 정보 또는 null (활성 폼이 없는 경우)
+ */
 export async function fetchActiveForm(): Promise<ActiveFormResponse | null> {
   try {
     const res = await apiClient.get<ActiveFormResponse>('/api/forms/active');
     return res.data;
   } catch (error: unknown) {
     const err = error as AxiosError;
+
+    // 404: 활성 폼이 없음 (정상적인 경우)
     if (err.response?.status === 404) {
-      return null; // 활성 폼이 없음
+      if (process.env.NODE_ENV === 'development') {
+        const backendMessage =
+          err.response?.data as { message?: string } | string;
+        const message =
+          typeof backendMessage === 'string'
+            ? backendMessage
+            : backendMessage?.message || '활성 폼이 없습니다';
+
+        console.log('[fetchActiveForm] 활성 폼 없음 (404):', {
+          backendResponse: err.response?.data,
+          message,
+        });
+      }
+      return null;
+    }
+
+    // 기타 에러는 상위로 전파
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[fetchActiveForm] 에러:', {
+        status: err.response?.status,
+        statusText: err.response?.statusText,
+        data: err.response?.data,
+        message: err.message,
+        url: err.config?.url,
+        baseURL: err.config?.baseURL,
+      });
     }
     throw err;
   }
 }
 
-// 지원서 제출
+/**
+ * 지원서 제출
+ * @param payload 지원서 제출 데이터
+ * @returns 제출 결과 (applicationId, resultCode)
+ */
 export async function submitApplication(
   payload: ApplicationSubmitRequest,
 ): Promise<ApplicationSubmitResponse> {
@@ -78,7 +115,11 @@ export async function submitApplication(
   return res.data;
 }
 
-// 지원 결과 조회 (resultCode 사용)
+/**
+ * 지원 결과 조회
+ * @param payload 결과 조회 코드
+ * @returns 지원 결과 정보
+ */
 export async function fetchApplicationResult(
   payload: ApplicationResultRequest,
 ): Promise<ApplicationResultResponse> {
