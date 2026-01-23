@@ -38,17 +38,14 @@ export interface UseResponsiveReturn {
 }
 
 export function useResponsive(): UseResponsiveReturn {
+  const [mounted, setMounted] = useState(false);
   const [dimensions, setDimensions] = useState(() => {
-    if (typeof window === "undefined") {
-      return { width: 1920, height: 1080 };
-    }
-    return {
-      width: window.innerWidth,
-      height: window.innerHeight,
-    };
+    // SSR과 초기 클라이언트 렌더링에서 같은 값을 반환 (desktop 기본값)
+    return { width: 1920, height: 1080 };
   });
 
   useEffect(() => {
+    setMounted(true);
     const handleResize = () => {
       setDimensions({
         width: window.innerWidth,
@@ -63,7 +60,10 @@ export function useResponsive(): UseResponsiveReturn {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const { width } = dimensions;
+  // 마운트되기 전까지는 서버와 같은 기본값 유지
+  const width = mounted ? dimensions.width : 1920;
+
+  
 
   const isMobile = width < breakpoints.sm;
   const isTablet = width >= breakpoints.sm && width < breakpoints.lg;
@@ -89,7 +89,7 @@ export function useResponsive(): UseResponsiveReturn {
 
   return {
     width,
-    height: dimensions.height,
+    height: mounted ? dimensions.height : 1080,
     isMobile,
     isTablet,
     isDesktop,
