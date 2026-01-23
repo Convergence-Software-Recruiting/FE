@@ -1,7 +1,7 @@
 'use client';
 
 import { useResponsive } from '@/hooks/useResponsive';
-import { gradientFooter } from '@/lib/colors';
+import { gradientFooter } from '@/lib/constants/colors';
 
 interface BackgroundPatternProps {
   children: React.ReactNode;

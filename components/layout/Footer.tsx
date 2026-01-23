@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useResponsive } from "@/hooks/useResponsive";
-import { gradientFooter } from "@/lib/colors";
+import { gradientFooter } from '@/lib/constants/colors';
 
 export default function Footer() {
   const { isMobile, isTablet } = useResponsive();
