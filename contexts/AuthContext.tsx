@@ -3,20 +3,27 @@
 /**
  * AuthContext.tsx
  *
- * - 기존에 Context + useState 로 구현했던 어드민 상태 관리를
- *   Zustand 스토어(`useAuthStore`) 래핑 형태로 단순화한 버전입니다.
- * - 실제 전역 상태는 전부 `stores/useAuthStore.ts` 에 있고,
- *   여기서는 "초기 한 번 me 호출" + "useAuth 훅"만 제공합니다.
+ * - Zustand 스토어(`useAuthStore`)를 래핑하는 얇은 레이어입니다.
+ * - 실제 전역 상태는 전부 `stores/useAuthStore.ts`에 있습니다.
+ * - 여기서는 "초기 한 번 me 호출" + "useAuth 훅"만 제공합니다.
  */
 
 import { ReactNode, useEffect } from 'react';
-import { useAuthStore, type AuthState, type AdminUser } from '@/stores/useAuthStore';
+import {
+  useAuthStore,
+  type AuthState,
+  type AdminUser,
+} from '@/stores/useAuthStore';
+
+// ============================================================================
+// AuthProvider
+// ============================================================================
 
 /**
  * 앱 전체를 감싸는 AuthProvider
  *
  * - Zustand 자체는 Provider가 필요 없지만,
- *   앱 최초 진입 시 `/api/admin/me` 를 한 번 호출해서
+ *   앱 최초 진입 시 `/api/admin/me`를 한 번 호출해서
  *   이미 로그인된 세션이 있는지 확인하기 위해 래퍼를 둡니다.
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -33,6 +40,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
+// ============================================================================
+// 타입 정의
+// ============================================================================
+
 /**
  * 컴포넌트에서 사용할 인증 상태/액션 타입
  *
@@ -41,6 +52,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export interface AuthContextType extends AuthState {
   admin: AdminUser | null;
 }
+
+// ============================================================================
+// useAuth 훅
+// ============================================================================
 
 /**
  * 전역 어드민 상태를 사용하는 훅

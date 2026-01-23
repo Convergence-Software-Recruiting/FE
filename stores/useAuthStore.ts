@@ -8,6 +8,11 @@ import {
   type AdminLoginRequest,
   type AdminMeResponse,
 } from '@/lib/adminApi';
+import type { AxiosError } from 'axios';
+
+// ============================================================================
+// 타입 정의
+// ============================================================================
 
 export interface AdminUser {
   id: number;
@@ -17,44 +22,78 @@ export interface AdminUser {
 }
 
 export interface AuthState {
+  // 상태
   admin: AdminUser | null;
   isLoading: boolean;
   isInitialized: boolean;
   error: string | null;
   accessToken: string | null;
   refreshToken: string | null;
+
+  // 액션
   refreshAdmin: () => Promise<void>;
   login: (payload: AdminLoginRequest) => Promise<boolean>;
   logout: () => Promise<void>;
 }
 
+// ============================================================================
+// 유틸리티 함수
+// ============================================================================
+
+function getStoredToken(key: string): string | null {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem(key);
+}
+
+function setStoredToken(key: string, value: string): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(key, value);
+}
+
+function removeStoredToken(key: string): void {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem(key);
+}
+
+function mapAdminUser(me: AdminMeResponse): AdminUser {
+  return {
+    id: me.id,
+    username: me.username,
+    role: me.role,
+    raw: me,
+  };
+}
+
+function getErrorMessage(error: unknown): string {
+  const axiosError = error as AxiosError<{ message?: string }>;
+  return (
+    axiosError.response?.data?.message ||
+    axiosError.message ||
+    '알 수 없는 오류가 발생했습니다.'
+  );
+}
+
+// ============================================================================
+// Zustand 스토어
+// ============================================================================
+
 export const useAuthStore = create<AuthState>((set, get) => ({
+  // 초기 상태
   admin: null,
   isLoading: false,
   isInitialized: false,
   error: null,
-  accessToken:
-    typeof window !== 'undefined'
-      ? localStorage.getItem('admin_access_token')
-      : null,
-  refreshToken:
-    typeof window !== 'undefined'
-      ? localStorage.getItem('admin_refresh_token')
-      : null,
+  accessToken: getStoredToken('admin_access_token'),
+  refreshToken: getStoredToken('admin_refresh_token'),
 
+  // 어드민 정보 새로고침
   async refreshAdmin() {
     set({ isLoading: true, error: null });
     try {
       const me = await fetchAdminMe();
       if (me) {
-        const mapped: AdminUser = {
-          id: me.id,
-          username: me.username,
-          role: me.role,
-          raw: me,
-        };
         set({
-          admin: mapped,
+          admin: mapAdminUser(me),
           isLoading: false,
           isInitialized: true,
           error: null,
@@ -67,52 +106,60 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           error: null,
         });
       }
-    } catch (error: any) {
-      console.error('useAuthStore.refreshAdmin error', error);
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[useAuthStore] refreshAdmin error:', error);
+      }
       set({
         admin: null,
         isLoading: false,
         isInitialized: true,
-        error: error?.message ?? '어드민 정보를 불러오는 중 오류가 발생했습니다.',
+        error: getErrorMessage(error),
       });
     }
   },
 
+  // 로그인
   async login(payload: AdminLoginRequest) {
     set({ isLoading: true, error: null });
     try {
       const { accessToken, refreshToken } = await loginAdmin(payload);
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('admin_access_token', accessToken);
-        localStorage.setItem('admin_refresh_token', refreshToken);
-      }
+      setStoredToken('admin_access_token', accessToken);
+      setStoredToken('admin_refresh_token', refreshToken);
       set({ accessToken, refreshToken });
       await get().refreshAdmin();
       return true;
-    } catch (error: any) {
-      console.error('useAuthStore.login error', error);
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[useAuthStore] login error:', error);
+      }
       set({
-        error: error?.message ?? '로그인에 실패했습니다.',
+        error: getErrorMessage(error),
         isLoading: false,
       });
       return false;
     }
   },
 
+  // 로그아웃
   async logout() {
     set({ isLoading: true, error: null });
     try {
       await logoutAdmin();
-    } catch (error: any) {
-      console.error('useAuthStore.logout error', error);
-      set({ error: error?.message ?? '로그아웃에 실패했습니다.' });
-    } finally {
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('admin_access_token');
-        localStorage.removeItem('admin_refresh_token');
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[useAuthStore] logout error:', error);
       }
-      set({ admin: null, accessToken: null, refreshToken: null, isLoading: false });
+      set({ error: getErrorMessage(error) });
+    } finally {
+      removeStoredToken('admin_access_token');
+      removeStoredToken('admin_refresh_token');
+      set({
+        admin: null,
+        accessToken: null,
+        refreshToken: null,
+        isLoading: false,
+      });
     }
   },
 }));
-
