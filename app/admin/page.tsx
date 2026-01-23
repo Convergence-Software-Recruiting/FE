@@ -1,12 +1,12 @@
 'use client';
 
+import Link from 'next/link';
+import { Lock, ArrowRight, ClipboardList } from 'lucide-react';
 import { useResponsive } from '@/hooks/useResponsive';
 import { useAuth } from '@/contexts/AuthContext';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { BackgroundPattern } from '@/components/ui/background-pattern';
 import { LoadingState } from '@/components/ui/loading-state';
-import { Lock, ArrowRight } from 'lucide-react';
 
 // ============================================================================
 // 메인 컴포넌트
@@ -95,57 +95,76 @@ export default function AdminPage() {
 
   // 로그인된 상태 - 어드민 정보 표시
   return (
-    <div
-      className={`min-h-screen bg-gradient-to-b from-background via-white to-navy-50/50 ${
-        isMobile ? 'py-12' : 'py-20'
-      }`}
-    >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <h1
-            className={`font-bold text-navy-900 mb-6 sm:mb-8 ${
-              isMobile ? 'text-2xl sm:text-3xl' : 'text-4xl sm:text-5xl'
-            }`}
-          >
-            Admin Page
-          </h1>
+    <BackgroundPattern>
+      <div className="min-h-screen">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="text-center">
+              <ClipboardList
+                className={`text-white/80 mx-auto mb-4 animate-fade-up ${
+                  isMobile ? 'w-12 h-12' : 'w-16 h-16'
+                }`}
+              />
+              <h1
+                className={`font-extrabold text-white mb-3 sm:mb-4 animate-fade-up [animation-delay:100ms] ${
+                  isMobile
+                    ? 'text-3xl sm:text-4xl'
+                    : isTablet
+                    ? 'text-4xl sm:text-5xl'
+                    : 'text-5xl sm:text-6xl'
+                }`}
+              >
+                관리자 대시보드
+              </h1>
+              <p
+                className={`text-white/90 leading-relaxed animate-fade-up [animation-delay:200ms] ${
+                  isMobile
+                    ? 'text-base sm:text-lg'
+                    : isTablet
+                    ? 'text-lg sm:text-xl'
+                    : 'text-xl'
+                }`}
+              >
+                모집 폼과 질문을 관리합니다.
+              </p>
+            </div>
 
-          <div
-            className={`text-navy-700 leading-relaxed space-y-4 ${
-              isMobile ? 'text-sm sm:text-base' : 'text-base sm:text-lg'
-            }`}
-          >
-            <div className="space-y-3">
-              <p className="font-semibold">현재 로그인된 어드민 정보:</p>
-              <div className="rounded-xl bg-white/60 border border-navy-100 p-4 text-sm sm:text-base">
-                <p>
-                  <span className="font-medium">ID:</span> {admin.id}
-                </p>
-                <p>
-                  <span className="font-medium">사용자명:</span> {admin.username}
+            <div className="bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 p-6 sm:p-8 shadow-2xl space-y-5">
+              <div className="flex items-center justify-between">
+                <p className="text-white/80 text-sm sm:text-base">
+                  현재 로그인된 관리자
                 </p>
                 {admin.role && (
-                  <p>
-                    <span className="font-medium">권한:</span> {admin.role}
-                  </p>
+                  <span className="px-3 py-1 rounded-full bg-white/10 text-white/70 text-xs sm:text-sm">
+                    {admin.role}
+                  </span>
                 )}
               </div>
+              <div className="space-y-2">
+                <p className="text-white text-lg sm:text-xl font-bold">
+                  {admin.username}
+                </p>
+                <p className="text-white/70 text-sm sm:text-base">
+                  ID: {admin.id}
+                </p>
+              </div>
 
-              {/* 개발용: raw 데이터 표시 */}
-              {process.env.NODE_ENV === 'development' && (
-                <details className="mt-2 cursor-pointer">
-                  <summary className="text-sm text-navy-500 hover:text-navy-700">
-                    raw 응답(JSON) 보기
-                  </summary>
-                  <pre className="mt-2 rounded-lg bg-gray-900 text-gray-100 text-xs p-3 overflow-auto">
-                    {JSON.stringify(admin.raw, null, 2)}
-                  </pre>
-                </details>
-              )}
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
+                <Link href="/admin/forms">
+                  <Button variant="hero" size={isMobile ? 'lg' : 'xl'}>
+                    모집 폼 관리
+                  </Button>
+                </Link>
+                <Link href="/">
+                  <Button variant="heroOutline" size={isMobile ? 'lg' : 'xl'}>
+                    메인으로
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </BackgroundPattern>
   );
 }
