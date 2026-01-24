@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ActivityCarousel from "@/components/ui/activity-carousel";
 import { useResponsive } from "@/hooks/useResponsive";
-import { gradientFooter } from "@/lib/colors";
+import { gradientFooter } from '@/lib/constants/colors';
 import type { ActivityImage } from "@/components/ui/activity-carousel";
 import {
   ArrowRight,
@@ -15,6 +15,7 @@ import {
   Award,
   Lightbulb,
   Heart,
+  Shield,
 } from "lucide-react";
 
 export default function Home() {
@@ -256,6 +257,18 @@ export default function Home() {
                   className={`shadow-xl ${isMobile ? "w-full" : ""}`}
                 >
                   비대위 알아보기
+                </Button>
+              </Link>
+              <Link href="/admin" className={isMobile ? "w-full" : ""}>
+                <Button
+                  variant="ghost"
+                  size={isMobile ? "lg" : "xl"}
+                  className={`text-white/80 hover:text-white hover:bg-white/10 ${
+                    isMobile ? "w-full" : ""
+                  }`}
+                >
+                  <Shield className="w-5 h-5" />
+                  관리자 기능
                 </Button>
               </Link>
             </div>

@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { useResponsive } from '@/hooks/useResponsive';
-import { Button } from '@/components/ui/button';
-import { LoadingState } from '@/components/ui/loading-state';
-import { ErrorState } from '@/components/ui/error-state';
-import { SuccessState } from '@/components/ui/success-state';
-import { BackgroundPattern } from '@/components/ui/background-pattern';
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { useResponsive } from "@/hooks/useResponsive";
+import { Button } from "@/components/ui/button";
+import { LoadingState } from "@/components/ui/loading-state";
+import { ErrorState } from "@/components/ui/error-state";
+import { SuccessState } from "@/components/ui/success-state";
+import { BackgroundPattern } from "@/components/ui/background-pattern";
 import {
   fetchActiveForm,
   submitApplication,
@@ -15,9 +15,9 @@ import {
   type ApplicationSubmitRequest,
   type ApplicationSubmitResponse,
   type FormQuestion,
-} from '@/lib/applicationApi';
-import { FileText, User, Loader2 } from 'lucide-react';
-import type { AxiosError } from 'axios';
+} from "@/lib/api/application";
+import { FileText, User, Loader2 } from "lucide-react";
+import type { AxiosError } from "axios";
 
 // ============================================================================
 // 타입 정의
@@ -49,11 +49,11 @@ export default function ApplyPage() {
 
   // 개인정보 필드
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({
-    name: '',
-    studentNo: '',
-    major: 'CONVERGENCE_SOFTWARE',
-    grade: '',
-    phone: '',
+    name: "",
+    studentNo: "",
+    major: "CONVERGENCE_SOFTWARE",
+    grade: "",
+    phone: "",
   });
 
   // 질문 답변
@@ -70,14 +70,14 @@ export default function ApplyPage() {
       const activeForm = await fetchActiveForm();
       setForm(activeForm);
       if (!activeForm) {
-        setError('현재 모집 중인 지원서가 없습니다.');
+        setError("현재 모집 중인 지원서가 없습니다.");
       }
     } catch (err) {
       const axiosError = err as AxiosError<{ message?: string }>;
       const errorMessage =
         axiosError.response?.data?.message ||
         axiosError.message ||
-        '지원서를 불러오는 중 오류가 발생했습니다.';
+        "지원서를 불러오는 중 오류가 발생했습니다.";
       setError(errorMessage);
       setForm(null);
     } finally {
@@ -100,12 +100,15 @@ export default function ApplyPage() {
     [],
   );
 
-  const handleAnswerChange = useCallback((questionId: number, value: string) => {
-    setAnswers((prev) => ({ ...prev, [questionId]: value }));
-  }, []);
+  const handleAnswerChange = useCallback(
+    (questionId: number, value: string) => {
+      setAnswers((prev) => ({ ...prev, [questionId]: value }));
+    },
+    [],
+  );
 
   const validateForm = useCallback((): string | null => {
-    if (!form) return '폼을 불러오는 중입니다.';
+    if (!form) return "폼을 불러오는 중입니다.";
 
     // 필수 필드 검증
     if (
@@ -114,7 +117,7 @@ export default function ApplyPage() {
       !personalInfo.grade ||
       !personalInfo.phone.trim()
     ) {
-      return '필수 정보를 모두 입력해주세요.';
+      return "필수 정보를 모두 입력해주세요.";
     }
 
     // 필수 질문 답변 검증
@@ -123,7 +126,7 @@ export default function ApplyPage() {
       (q) => !answers[q.id] || !answers[q.id].trim(),
     );
     if (missingAnswers.length > 0) {
-      return '필수 질문에 모두 답변해주세요.';
+      return "필수 질문에 모두 답변해주세요.";
     }
 
     return null;
@@ -165,14 +168,14 @@ export default function ApplyPage() {
       } catch (err) {
         const axiosError = err as AxiosError<{ message?: string }>;
         if (axiosError.response?.status === 409) {
-          setError('이미 지원서를 제출하셨습니다.');
+          setError("이미 지원서를 제출하셨습니다.");
         } else if (axiosError.response?.status === 400) {
-          setError('입력 정보를 확인해주세요.');
+          setError("입력 정보를 확인해주세요.");
         } else {
           setError(
             axiosError.response?.data?.message ||
               axiosError.message ||
-              '지원서 제출에 실패했습니다.',
+              "지원서 제출에 실패했습니다.",
           );
         }
       } finally {
@@ -202,11 +205,11 @@ export default function ApplyPage() {
 
   // 활성 폼 없음 또는 에러
   if (!form && !isLoading) {
-    const isError = error?.includes('오류') ?? false;
+    const isError = error?.includes("오류") ?? false;
     return (
       <ErrorState
-        title={isError ? '오류가 발생했습니다' : '모집 기간이 아닙니다'}
-        message={error || '현재 모집 중인 지원서가 없습니다.'}
+        title={isError ? "오류가 발생했습니다" : "모집 기간이 아닙니다"}
+        message={error || "현재 모집 중인 지원서가 없습니다."}
         showRetry={isError}
         onRetry={loadForm}
         retryLabel="다시 시도"
@@ -222,12 +225,12 @@ export default function ApplyPage() {
         message="지원서가 성공적으로 제출되었습니다. 결과는 추후 안내드리겠습니다."
         code={resultCode}
         primaryAction={{
-          label: '메인으로 돌아가기',
-          onClick: () => router.push('/'),
+          label: "메인으로 돌아가기",
+          onClick: () => router.push("/"),
         }}
         secondaryAction={{
-          label: '지원 결과 조회',
-          onClick: () => router.push('/apply/result'),
+          label: "지원 결과 조회",
+          onClick: () => router.push("/apply/result"),
         }}
       />
     );
@@ -244,16 +247,16 @@ export default function ApplyPage() {
           <div className="text-center mb-8 sm:mb-12">
             <FileText
               className={`text-white/80 mx-auto mb-4 animate-fade-up ${
-                isMobile ? 'w-12 h-12' : 'w-16 h-16'
+                isMobile ? "w-12 h-12" : "w-16 h-16"
               }`}
             />
             <h1
               className={`font-extrabold text-white mb-4 sm:mb-6 animate-fade-up [animation-delay:100ms] ${
                 isMobile
-                  ? 'text-3xl sm:text-4xl'
+                  ? "text-3xl sm:text-4xl"
                   : isTablet
-                  ? 'text-4xl sm:text-5xl'
-                  : 'text-5xl sm:text-6xl'
+                    ? "text-4xl sm:text-5xl"
+                    : "text-5xl sm:text-6xl"
               }`}
             >
               {form.title}
@@ -262,10 +265,10 @@ export default function ApplyPage() {
               <p
                 className={`text-white/90 leading-relaxed animate-fade-up [animation-delay:200ms] ${
                   isMobile
-                    ? 'text-base sm:text-lg'
+                    ? "text-base sm:text-lg"
                     : isTablet
-                    ? 'text-lg sm:text-xl'
-                    : 'text-xl'
+                      ? "text-lg sm:text-xl"
+                      : "text-xl"
                 }`}
               >
                 {form.description}
@@ -307,7 +310,7 @@ export default function ApplyPage() {
               <Button
                 type="submit"
                 variant="hero"
-                size={isMobile ? 'lg' : 'xl'}
+                size={isMobile ? "lg" : "xl"}
                 disabled={isSubmitting}
                 className="shadow-2xl w-full sm:w-auto"
               >
@@ -317,14 +320,14 @@ export default function ApplyPage() {
                     제출 중...
                   </>
                 ) : (
-                  '지원서 제출하기'
+                  "지원서 제출하기"
                 )}
               </Button>
               <Button
                 type="button"
                 variant="heroOutline"
-                size={isMobile ? 'lg' : 'xl'}
-                onClick={() => router.push('/')}
+                size={isMobile ? "lg" : "xl"}
+                onClick={() => router.push("/")}
                 className="shadow-xl w-full sm:w-auto"
               >
                 취소
@@ -369,7 +372,7 @@ function PersonalInfoSection({
           type="text"
           required
           value={personalInfo.name}
-          onChange={(e) => onChange('name', e.target.value)}
+          onChange={(e) => onChange("name", e.target.value)}
           placeholder="이름을 입력하세요"
           className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 placeholder-navy-500 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
         />
@@ -385,7 +388,7 @@ function PersonalInfoSection({
           type="text"
           required
           value={personalInfo.studentNo}
-          onChange={(e) => onChange('studentNo', e.target.value)}
+          onChange={(e) => onChange("studentNo", e.target.value)}
           placeholder="학번을 입력하세요 (예: 202312345)"
           className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 placeholder-navy-500 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
         />
@@ -400,7 +403,7 @@ function PersonalInfoSection({
         <select
           required
           value={personalInfo.major}
-          onChange={(e) => onChange('major', e.target.value)}
+          onChange={(e) => onChange("major", e.target.value)}
           className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
         >
           <option value="CONVERGENCE_SOFTWARE">융합소프트웨어</option>
@@ -416,7 +419,7 @@ function PersonalInfoSection({
         <select
           required
           value={personalInfo.grade}
-          onChange={(e) => onChange('grade', e.target.value)}
+          onChange={(e) => onChange("grade", e.target.value)}
           className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
         >
           <option value="">선택하세요</option>
@@ -437,7 +440,7 @@ function PersonalInfoSection({
           type="tel"
           required
           value={personalInfo.phone}
-          onChange={(e) => onChange('phone', e.target.value)}
+          onChange={(e) => onChange("phone", e.target.value)}
           placeholder="전화번호를 입력하세요 (예: 010-1234-5678)"
           className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 placeholder-navy-500 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
         />
@@ -488,7 +491,7 @@ function QuestionsSection({
 
           <textarea
             required={question.required}
-            value={answers[question.id] || ''}
+            value={answers[question.id] || ""}
             onChange={(e) => onChange(question.id, e.target.value)}
             className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 placeholder-navy-500 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent resize-none"
             rows={4}

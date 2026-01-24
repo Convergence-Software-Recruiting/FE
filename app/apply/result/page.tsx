@@ -9,7 +9,7 @@ import { LoadingState } from '@/components/ui/loading-state';
 import {
   fetchApplicationResult,
   type ApplicationResultResponse,
-} from '@/lib/applicationApi';
+} from '@/lib/api/application';
 import { Search, CheckCircle, XCircle, Clock, Loader2 } from 'lucide-react';
 import type { AxiosError } from 'axios';
 

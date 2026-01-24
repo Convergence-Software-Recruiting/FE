@@ -7,7 +7,7 @@ import {
   logoutAdmin,
   type AdminLoginRequest,
   type AdminMeResponse,
-} from '@/lib/adminApi';
+} from '@/lib/api/admin';
 import type { AxiosError } from 'axios';
 
 // ============================================================================
