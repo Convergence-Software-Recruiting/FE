@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { Lock, ArrowRight, ClipboardList } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Lock, ArrowRight, ClipboardList, LogOut } from 'lucide-react';
 import { useResponsive } from '@/hooks/useResponsive';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,13 @@ import { LoadingState } from '@/components/ui/loading-state';
 
 export default function AdminPage() {
   const { isMobile, isTablet } = useResponsive();
-  const { admin, isLoading, error } = useAuth();
+  const router = useRouter();
+  const { admin, isLoading, error, logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/admin/login');
+  };
 
   // 로딩 상태
   if (isLoading) {
@@ -149,7 +156,7 @@ export default function AdminPage() {
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 pt-2">
                 <Link href="/admin/forms">
                   <Button variant="hero" size={isMobile ? 'lg' : 'xl'}>
                     모집 폼 관리
@@ -160,6 +167,15 @@ export default function AdminPage() {
                     메인으로
                   </Button>
                 </Link>
+                <Button
+                  variant="ghost"
+                  size={isMobile ? 'lg' : 'xl'}
+                  onClick={handleLogout}
+                  className="text-white/80 hover:text-white hover:bg-white/10"
+                >
+                  <LogOut className="w-5 h-5 mr-2" />
+                  로그아웃
+                </Button>
               </div>
             </div>
           </div>
