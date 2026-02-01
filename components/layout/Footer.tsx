@@ -1,17 +1,16 @@
 "use client";
 
-import Link from "next/link";
 import { useResponsive } from "@/hooks/useResponsive";
 import { gradientFooter } from '@/lib/constants/colors';
 
 export default function Footer() {
   const { isMobile, isTablet } = useResponsive();
 
-  // 네비게이션 링크
+  // 네비게이션 링크 (외부)
   const navLinks = [
-    { label: "ABOUT", href: "/about" },
-    { label: "APPLY", href: "/apply" },
-    { label: "CONTACT", href: "/contact" },
+    { label: "ABOUT", href: "https://www.instagram.com/mju_cow/" },
+    { label: "APPLY", href: "https://ddingdong.mju.ac.kr/club/91" },
+    { label: "CONTACT", href: "https://www.instagram.com/frizsbeen/" },
   ];
 
   return (
@@ -109,15 +108,17 @@ export default function Footer() {
               }`}
             >
               {navLinks.map((link) => (
-                <Link
+                <a
                   key={link.href}
                   href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={`text-white/70 hover:text-white transition-colors ${
                     isMobile ? "text-xs sm:text-sm" : "text-sm"
                   }`}
                 >
                   {link.label}
-                </Link>
+                </a>
               ))}
             </nav>
 
