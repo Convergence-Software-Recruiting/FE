@@ -87,7 +87,6 @@ export default function AboutPage() {
 
   return (
     <>
-      {/* Hero - 메인과 동일한 배경 */}
       <section className="relative min-h-[40vh] flex items-center justify-center bg-gradient-hero overflow-hidden">
         <div
           className="absolute inset-0 opacity-90"
@@ -158,7 +157,7 @@ export default function AboutPage() {
                 href={INSTAGRAM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 sm:px-5 sm:py-3 text-white hover:bg-white/20 hover:border-white/30 transition-all duration-200"
+                className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 sm:px-5 sm:py-3 text-white hover:bg-white/20 hover:border-white/30 hover:scale-105 transition-all duration-200"
               >
                 <Instagram className={isMobile ? "w-5 h-5" : "w-6 h-6"} />
                 <span
@@ -173,7 +172,7 @@ export default function AboutPage() {
                 href={LINKTREE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 sm:px-5 sm:py-3 text-white hover:bg-white/20 hover:border-white/30 transition-all duration-200"
+                className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 sm:px-5 sm:py-3 text-white hover:bg-white/20 hover:border-white/30 hover:scale-105 transition-all duration-200"
               >
                 <ExternalLink className={isMobile ? "w-5 h-5" : "w-6 h-6"} />
                 <span
@@ -186,7 +185,7 @@ export default function AboutPage() {
               </a>
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 sm:px-5 sm:py-3 text-white hover:bg-white/20 hover:border-white/30 transition-all duration-200"
+                className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 sm:px-5 sm:py-3 text-white hover:bg-white/20 hover:border-white/30 hover:scale-105 transition-all duration-200"
               >
                 <Home className={isMobile ? "w-5 h-5" : "w-6 h-6"} />
                 <span
@@ -202,7 +201,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Stats */}
       <section
         className={`bg-gradient-to-b from-navy-900 to-navy-800 border-b border-navy-700 ${isMobile ? "py-12" : "py-16"}`}
       >
@@ -213,7 +211,7 @@ export default function AboutPage() {
             {stats.map((stat, i) => (
               <div
                 key={i}
-                className="text-center rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-4 sm:p-6"
+                className="text-center rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-4 sm:p-6 transition-all duration-200 hover:scale-[1.02] hover:bg-white/10"
               >
                 <p
                   className={`font-bold text-gold-400 mb-2 ${isMobile ? "text-2xl" : "text-3xl sm:text-4xl"}`}
@@ -229,7 +227,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 활동 사진 */}
       <section
         className={`bg-gradient-to-b from-navy-800 to-navy-900 border-b border-navy-700 min-h-[560px] ${isMobile ? "py-20" : "py-32"}`}
       >
@@ -249,7 +246,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 비대위와 함께하면 */}
       <section
         className={`bg-gradient-to-b from-background via-white to-navy-50/50 ${isMobile ? "py-12" : "py-20"}`}
       >
@@ -270,7 +266,7 @@ export default function AboutPage() {
             {features.map((f, i) => (
               <div
                 key={i}
-                className="rounded-3xl bg-white border-2 border-navy-100 hover:border-gold-400 hover:shadow-xl p-6 sm:p-8 transition-all"
+                className="rounded-3xl bg-white border-2 border-navy-100 hover:border-gold-400 hover:shadow-xl hover:scale-[1.02] p-6 sm:p-8 transition-all duration-200"
               >
                 <div className="rounded-2xl bg-gradient-to-br from-navy-500 to-navy-700 flex items-center justify-center text-white w-14 h-14 mb-4">
                   {f.icon}
@@ -287,7 +283,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 우리의 가치 */}
       <section
         className={`bg-gradient-to-b from-white via-navy-50/30 to-white ${isMobile ? "py-12" : "py-20"}`}
       >
@@ -303,9 +298,9 @@ export default function AboutPage() {
             >
               {values.map((v, i) => (
                 <div
-                  key={i}
-                  className="text-center rounded-2xl bg-gradient-to-br from-navy-50 to-white border border-navy-100 p-6"
-                >
+                key={i}
+                className="text-center rounded-2xl bg-gradient-to-br from-navy-50 to-white border border-navy-100 p-6 transition-all duration-200 hover:scale-[1.02] hover:shadow-md"
+              >
                   <div className="rounded-full bg-gold-100 flex items-center justify-center text-gold-600 w-14 h-14 mx-auto mb-3">
                     {v.icon}
                   </div>
@@ -318,7 +313,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 투명하고 청렴한 운영 */}
       <section
         className={`bg-gradient-to-b from-white via-emerald-50/30 to-white ${isMobile ? "py-12" : "py-20"}`}
       >
@@ -344,7 +338,7 @@ export default function AboutPage() {
             <div
               className={`grid gap-4 sm:gap-6 ${isMobile ? "grid-cols-1" : "md:grid-cols-3"}`}
             >
-              <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-100 p-6 sm:p-8">
+              <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-100 p-6 sm:p-8 transition-all duration-200 hover:scale-[1.02] hover:shadow-md">
                 <div className="rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 w-14 h-14 mb-4">
                   <CheckCircle className="w-7 h-7" />
                 </div>
@@ -355,7 +349,7 @@ export default function AboutPage() {
                   토스 모임통장을 통해 모든 입출금 내역이 실시간으로 공개됩니다.
                 </p>
               </div>
-              <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-100 p-6 sm:p-8">
+              <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-100 p-6 sm:p-8 transition-all duration-200 hover:scale-[1.02] hover:shadow-md">
                 <div className="rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 w-14 h-14 mb-4">
                   <Lock className="w-7 h-7" />
                 </div>
@@ -367,7 +361,7 @@ export default function AboutPage() {
                   관리합니다.
                 </p>
               </div>
-              <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-100 p-6 sm:p-8">
+              <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-100 p-6 sm:p-8 transition-all duration-200 hover:scale-[1.02] hover:shadow-md">
                 <div className="rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 w-14 h-14 mb-4">
                   <Eye className="w-7 h-7" />
                 </div>
@@ -390,7 +384,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* CTA */}
       <section
         className={`bg-gradient-navy relative overflow-hidden ${isMobile ? "py-12" : "py-20"}`}
       >
@@ -408,14 +401,14 @@ export default function AboutPage() {
             <p className="text-white/90 mb-8 text-base sm:text-lg">
               비대위와 함께 의미 있는 대학 생활을 만들어가세요.
             </p>
-            <Link href="/apply">
+            <Link href="/apply" className="inline-block transition-transform duration-200 hover:scale-[1.02]">
               <Button
                 variant="hero"
                 size={isMobile ? "lg" : "xl"}
-                className="shadow-2xl"
+                className="group shadow-2xl"
               >
                 지원서 작성하기
-                <ChevronRight className="w-5 h-5 ml-2" />
+                <ChevronRight className="w-5 h-5 ml-2 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Button>
             </Link>
           </div>

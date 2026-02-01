@@ -27,7 +27,6 @@ export default function ActivityCarousel({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const { isMobile, isTablet } = useResponsive();
 
-  // 자동 재생
   useEffect(() => {
     if (!autoPlay || images.length <= 1) return;
 
@@ -63,7 +62,6 @@ export default function ActivityCarousel({
 
   return (
     <div className="relative w-full">
-      {/* 캐러셀 컨테이너 */}
       <div className="relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
         <div
           className="flex transition-transform duration-500 ease-in-out"
@@ -86,18 +84,16 @@ export default function ActivityCarousel({
                 className="object-cover"
                 priority={index === currentIndex}
               />
-              {/* 그라데이션 오버레이 */}
               <div className="absolute inset-0 bg-gradient-to-t from-navy-900/80 via-navy-900/20 to-transparent" />
             </div>
           ))}
         </div>
 
-        {/* 네비게이션 버튼 */}
         {images.length > 1 && (
           <>
             <button
               onClick={handlePrev}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all duration-200 disabled:opacity-50"
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 hover:scale-110 transition-all duration-200 disabled:opacity-50"
               disabled={isTransitioning}
               aria-label="이전 이미지"
             >
@@ -107,7 +103,7 @@ export default function ActivityCarousel({
             </button>
             <button
               onClick={handleNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all duration-200 disabled:opacity-50"
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 hover:scale-110 transition-all duration-200 disabled:opacity-50"
               disabled={isTransitioning}
               aria-label="다음 이미지"
             >
@@ -118,7 +114,6 @@ export default function ActivityCarousel({
           </>
         )}
 
-        {/* 인디케이터 */}
         {images.length > 1 && (
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex gap-2">
             {images.map((_, index) => (
@@ -126,7 +121,7 @@ export default function ActivityCarousel({
                 key={index}
                 onClick={() => goToSlide(index)}
                 className={cn(
-                  "transition-all duration-300 rounded-full",
+                  "transition-all duration-200 rounded-full hover:scale-125",
                   index === currentIndex
                     ? "bg-gold-500 w-8 h-2"
                     : "bg-white/30 w-2 h-2 hover:bg-white/50"
