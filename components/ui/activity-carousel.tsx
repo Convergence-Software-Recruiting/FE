@@ -76,7 +76,7 @@ export default function ActivityCarousel({
               key={image.id}
               className="relative w-full flex-shrink-0"
               style={{
-                minHeight: isMobile ? "200px" : isTablet ? "300px" : "400px",
+                minHeight: isMobile ? "320px" : isTablet ? "440px" : "560px",
               }}
             >
               <Image
