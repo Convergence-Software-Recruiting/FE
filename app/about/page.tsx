@@ -69,8 +69,8 @@ export default function AboutPage() {
   ];
 
   const stats = [
-    { value: "50+", label: "누적 활동 인원" },
-    { value: "20+", label: "진행 프로젝트" },
+    { value: "80+", label: "누적 활동 인원" },
+    { value: "10+", label: "진행 프로젝트" },
     { value: "4", label: "전공 분야" },
     { value: "2026", label: "신입부원 모집" },
   ];
@@ -251,6 +251,9 @@ export default function AboutPage() {
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
+            <div className="inline-flex items-center justify-center rounded-full bg-gradient-to-br from-navy-500 to-navy-700 text-white w-16 h-16 mb-4">
+              <Users className="w-8 h-8" />
+            </div>
             <h2
               className={`font-bold text-navy-900 mb-4 ${isMobile ? "text-2xl" : "text-4xl"}`}
             >
@@ -288,19 +291,24 @@ export default function AboutPage() {
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
-            <h2
-              className={`font-bold text-center text-navy-900 mb-8 ${isMobile ? "text-2xl" : "text-3xl sm:text-4xl"}`}
-            >
-              우리의 가치
-            </h2>
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center justify-center rounded-full bg-gold-100 text-gold-600 w-16 h-16 mb-4">
+                <Award className="w-8 h-8" />
+              </div>
+              <h2
+                className={`font-bold text-navy-900 ${isMobile ? "text-2xl" : "text-3xl sm:text-4xl"}`}
+              >
+                우리의 가치
+              </h2>
+            </div>
             <div
               className={`grid gap-4 sm:gap-6 ${isMobile ? "grid-cols-1 sm:grid-cols-2" : "md:grid-cols-3"}`}
             >
               {values.map((v, i) => (
                 <div
-                key={i}
-                className="text-center rounded-2xl bg-gradient-to-br from-navy-50 to-white border border-navy-100 p-6 transition-all duration-200 hover:scale-[1.02] hover:shadow-md"
-              >
+                  key={i}
+                  className="text-center rounded-2xl bg-gradient-to-br from-navy-50 to-white border border-navy-100 p-6 transition-all duration-200 hover:scale-[1.02] hover:shadow-md"
+                >
                   <div className="rounded-full bg-gold-100 flex items-center justify-center text-gold-600 w-14 h-14 mx-auto mb-3">
                     {v.icon}
                   </div>
@@ -401,7 +409,10 @@ export default function AboutPage() {
             <p className="text-white/90 mb-8 text-base sm:text-lg">
               비대위와 함께 의미 있는 대학 생활을 만들어가세요.
             </p>
-            <Link href="/apply" className="inline-block transition-transform duration-200 hover:scale-[1.02]">
+            <Link
+              href="/apply"
+              className="inline-block transition-transform duration-200 hover:scale-[1.02]"
+            >
               <Button
                 variant="hero"
                 size={isMobile ? "lg" : "xl"}

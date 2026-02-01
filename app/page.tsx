@@ -5,8 +5,19 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useResponsive } from "@/hooks/useResponsive";
 import { gradientFooter } from "@/lib/constants/colors";
-import { fetchApplicationResult, type ApplicationResultResponse } from "@/lib/api/application";
-import { ArrowRight, Shield, Search, CheckCircle, XCircle, Loader2, Lock } from "lucide-react";
+import {
+  fetchApplicationResult,
+  type ApplicationResultResponse,
+} from "@/lib/api/application";
+import {
+  ArrowRight,
+  Shield,
+  Search,
+  CheckCircle,
+  XCircle,
+  Loader2,
+  Lock,
+} from "lucide-react";
 import type { AxiosError } from "axios";
 
 const RESULT_LOOKUP_ENABLED = false;
@@ -41,14 +52,14 @@ export default function Home() {
         } else {
           setResultError(
             (axiosError.response?.data as { message?: string })?.message ||
-              "결과 조회에 실패했습니다. 결과 공개 이후에만 조회 가능합니다."
+              "결과 조회에 실패했습니다. 결과 공개 이후에만 조회 가능합니다.",
           );
         }
       } finally {
         setResultLoading(false);
       }
     },
-    [resultCode]
+    [resultCode],
   );
 
   return (
@@ -173,13 +184,16 @@ export default function Home() {
                 isMobile ? "flex-col w-full px-4" : "flex-col sm:flex-row"
               }`}
             >
-              <Link href="/apply" className={`inline-block transition-transform duration-200 hover:scale-[1.02] ${isMobile ? "w-full" : ""}`}>
+              <Link
+                href="/about"
+                className={`inline-block transition-transform duration-200 hover:scale-[1.02] ${isMobile ? "w-full" : ""}`}
+              >
                 <Button
                   variant="hero"
                   size={isMobile ? "lg" : "xl"}
                   className={`group shadow-2xl ${isMobile ? "w-full" : ""}`}
                 >
-                  지원하기
+                  비대위 알아보기
                   <ArrowRight
                     className={`transition-transform group-hover:translate-x-1 ${
                       isMobile ? "w-4 h-4" : "w-5 h-5"
@@ -187,16 +201,22 @@ export default function Home() {
                   />
                 </Button>
               </Link>
-              <Link href="/about" className={`inline-block transition-transform duration-200 hover:scale-[1.02] ${isMobile ? "w-full" : ""}`}>
+              <Link
+                href="/apply"
+                className={`inline-block transition-transform duration-200 hover:scale-[1.02] ${isMobile ? "w-full" : ""}`}
+              >
                 <Button
                   variant="heroOutline"
                   size={isMobile ? "lg" : "xl"}
                   className={`shadow-xl ${isMobile ? "w-full" : ""}`}
                 >
-                  비대위 알아보기
+                  지원하기
                 </Button>
               </Link>
-              <Link href="/admin" className={`inline-block transition-transform duration-200 hover:scale-[1.02] ${isMobile ? "w-full" : ""}`}>
+              <Link
+                href="/admin"
+                className={`inline-block transition-transform duration-200 hover:scale-[1.02] ${isMobile ? "w-full" : ""}`}
+              >
                 <Button
                   variant="ghost"
                   size={isMobile ? "lg" : "xl"}
@@ -258,11 +278,13 @@ export default function Home() {
               </h2>
               {RESULT_LOOKUP_ENABLED ? (
                 <p className="text-white/70 text-sm sm:text-base">
-                  제출 시 발급받은 4자리 결과 코드로 합격 여부를 조회할 수 있습니다. 결과 공개 이후에만 조회 가능합니다.
+                  제출 시 발급받은 4자리 결과 코드로 합격 여부를 조회할 수
+                  있습니다. 결과 공개 이후에만 조회 가능합니다.
                 </p>
               ) : (
                 <p className="text-white/70 text-sm sm:text-base">
-                  지금은 결과 조회 기간이 아닙니다. 결과 공개 후 조회 가능합니다.
+                  지금은 결과 조회 기간이 아닙니다. 결과 공개 후 조회
+                  가능합니다.
                 </p>
               )}
             </div>
@@ -275,7 +297,12 @@ export default function Home() {
                   type="text"
                   value={resultCode}
                   onChange={(e) =>
-                    setResultCode(e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 4).toUpperCase())
+                    setResultCode(
+                      e.target.value
+                        .replace(/[^A-Za-z0-9]/g, "")
+                        .slice(0, 4)
+                        .toUpperCase(),
+                    )
                   }
                   placeholder="예: A4K3"
                   maxLength={4}
@@ -305,18 +332,28 @@ export default function Home() {
             </form>
             {RESULT_LOOKUP_ENABLED && result && (
               <div className="mt-4 sm:mt-6 p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 text-center">
-                {["ACCEPTED", "합격", "PASS"].includes((result.status ?? "").toUpperCase()) ? (
+                {["ACCEPTED", "합격", "PASS"].includes(
+                  (result.status ?? "").toUpperCase(),
+                ) ? (
                   <>
                     <CheckCircle className="w-12 h-12 sm:w-14 sm:h-14 text-gold-400 mx-auto mb-2" />
-                    <p className="font-bold text-gold-400 text-xl sm:text-2xl">합격</p>
+                    <p className="font-bold text-gold-400 text-xl sm:text-2xl">
+                      합격
+                    </p>
                   </>
-                ) : ["REJECTED", "불합격", "FAIL"].includes((result.status ?? "").toUpperCase()) ? (
+                ) : ["REJECTED", "불합격", "FAIL"].includes(
+                    (result.status ?? "").toUpperCase(),
+                  ) ? (
                   <>
                     <XCircle className="w-12 h-12 sm:w-14 sm:h-14 text-red-400 mx-auto mb-2" />
-                    <p className="font-bold text-red-400 text-xl sm:text-2xl">불합격</p>
+                    <p className="font-bold text-red-400 text-xl sm:text-2xl">
+                      불합격
+                    </p>
                   </>
                 ) : (
-                  <p className="font-bold text-white/80 text-xl sm:text-2xl">심사 중</p>
+                  <p className="font-bold text-white/80 text-xl sm:text-2xl">
+                    심사 중
+                  </p>
                 )}
                 {result.result && (
                   <p className="mt-3 text-white/80 text-sm sm:text-base whitespace-pre-line">
