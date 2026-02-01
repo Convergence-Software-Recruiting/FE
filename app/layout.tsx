@@ -31,9 +31,9 @@ export const metadata: Metadata = {
   title: "융합소프트웨어 비상대책위원회",
   description: "명지대학교 융합소프트웨어학부의 변화를 이끄는 학생 자치 기구",
   icons: {
-    icon: "/logos/SchoolLogo.png",
-    shortcut: "/logos/SchoolLogo.png",
-    apple: "/logos/SchoolLogo.png",
+    icon: "/logos/mjuswlogo.webp",
+    shortcut: "/logos/mjuswlogo.webp",
+    apple: "/logos/mjuswlogo.webp",
   },
 };
 

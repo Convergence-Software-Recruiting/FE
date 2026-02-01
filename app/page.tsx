@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ActivityCarousel from "@/components/ui/activity-carousel";
 import { useResponsive } from "@/hooks/useResponsive";
-import { gradientFooter } from '@/lib/constants/colors';
+import { gradientFooter } from "@/lib/constants/colors";
 import type { ActivityImage } from "@/components/ui/activity-carousel";
 import {
   ArrowRight,
@@ -16,6 +16,10 @@ import {
   Lightbulb,
   Heart,
   Shield,
+  CheckCircle,
+  Lock,
+  Eye,
+  Wallet,
 } from "lucide-react";
 
 export default function Home() {
@@ -135,8 +139,8 @@ export default function Home() {
               isMobile
                 ? "w-[300px] h-[300px]"
                 : isTablet
-                ? "w-[400px] h-[400px]"
-                : "w-[600px] h-[600px]"
+                  ? "w-[400px] h-[400px]"
+                  : "w-[600px] h-[600px]"
             }`}
           />
         </div>
@@ -201,8 +205,8 @@ export default function Home() {
                 isMobile
                   ? "text-3xl"
                   : isTablet
-                  ? "text-4xl sm:text-5xl md:text-6xl"
-                  : "text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+                    ? "text-4xl sm:text-5xl md:text-6xl"
+                    : "text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
               }`}
             >
               융합소프트웨어
@@ -218,8 +222,8 @@ export default function Home() {
                 isMobile
                   ? "text-base px-2"
                   : isTablet
-                  ? "text-lg sm:text-xl"
-                  : "text-xl sm:text-2xl"
+                    ? "text-lg sm:text-xl"
+                    : "text-xl sm:text-2xl"
               }`}
             >
               명지대학교 융합소프트웨어학부의 변화를 이끄는 학생 자치
@@ -316,8 +320,8 @@ export default function Home() {
                     isMobile
                       ? "text-2xl sm:text-3xl"
                       : isTablet
-                      ? "text-3xl sm:text-4xl md:text-5xl"
-                      : "text-4xl sm:text-5xl md:text-6xl"
+                        ? "text-3xl sm:text-4xl md:text-5xl"
+                        : "text-4xl sm:text-5xl md:text-6xl"
                   }`}
                 >
                   {stat.value}
@@ -470,6 +474,139 @@ export default function Home() {
                   </p>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Transparency Section */}
+      <section
+        className={`bg-gradient-to-b from-white via-emerald-50/30 to-white ${
+          isMobile ? "py-12" : "py-20"
+        }`}
+      >
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-8 sm:mb-12">
+              <div
+                className={`inline-flex items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-4 sm:mb-6 ${
+                  isMobile ? "w-16 h-16" : "w-20 h-20"
+                }`}
+              >
+                <Wallet className={isMobile ? "w-8 h-8" : "w-10 h-10"} />
+              </div>
+              <h2
+                className={`font-bold text-navy-900 mb-3 sm:mb-4 ${
+                  isMobile ? "text-2xl sm:text-3xl" : "text-3xl sm:text-4xl"
+                }`}
+              >
+                투명하고 청렴한 운영
+              </h2>
+              <p
+                className={`text-navy-600 leading-relaxed max-w-2xl mx-auto ${
+                  isMobile ? "text-sm sm:text-base" : "text-base sm:text-lg"
+                }`}
+              >
+                비대위는{" "}
+                <span className="font-semibold text-emerald-600">
+                  토스 모임통장
+                </span>
+                을 활용하여 모든 회계 내역을 투명하게 공개하고 있습니다.
+              </p>
+            </div>
+
+            <div
+              className={`grid gap-4 sm:gap-6 ${
+                isMobile ? "grid-cols-1" : "md:grid-cols-3"
+              }`}
+            >
+              <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-100 hover:border-emerald-200 hover:shadow-lg transition-all duration-300 p-6 sm:p-8">
+                <div
+                  className={`rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 mb-4 sm:mb-6 ${
+                    isMobile ? "w-12 h-12" : "w-14 h-14"
+                  }`}
+                >
+                  <CheckCircle className={isMobile ? "w-6 h-6" : "w-7 h-7"} />
+                </div>
+                <h3
+                  className={`font-bold text-navy-900 mb-2 sm:mb-3 ${
+                    isMobile ? "text-lg" : "text-xl"
+                  }`}
+                >
+                  실시간 회계 공개
+                </h3>
+                <p
+                  className={`text-navy-600 leading-relaxed ${
+                    isMobile ? "text-sm" : "text-base"
+                  }`}
+                >
+                  토스 모임통장을 통해 모든 입출금 내역이 실시간으로 공개되어
+                  누구나 확인할 수 있습니다.
+                </p>
+              </div>
+
+              <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-100 hover:border-emerald-200 hover:shadow-lg transition-all duration-300 p-6 sm:p-8">
+                <div
+                  className={`rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 mb-4 sm:mb-6 ${
+                    isMobile ? "w-12 h-12" : "w-14 h-14"
+                  }`}
+                >
+                  <Lock className={isMobile ? "w-6 h-6" : "w-7 h-7"} />
+                </div>
+                <h3
+                  className={`font-bold text-navy-900 mb-2 sm:mb-3 ${
+                    isMobile ? "text-lg" : "text-xl"
+                  }`}
+                >
+                  안전한 자금 관리
+                </h3>
+                <p
+                  className={`text-navy-600 leading-relaxed ${
+                    isMobile ? "text-sm" : "text-base"
+                  }`}
+                >
+                  토스의 안전한 금융 인프라를 통해 회비와 예산을 신뢰할 수 있게
+                  관리합니다.
+                </p>
+              </div>
+
+              <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-100 hover:border-emerald-200 hover:shadow-lg transition-all duration-300 p-6 sm:p-8">
+                <div
+                  className={`rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 mb-4 sm:mb-6 ${
+                    isMobile ? "w-12 h-12" : "w-14 h-14"
+                  }`}
+                >
+                  <Eye className={isMobile ? "w-6 h-6" : "w-7 h-7"} />
+                </div>
+                <h3
+                  className={`font-bold text-navy-900 mb-2 sm:mb-3 ${
+                    isMobile ? "text-lg" : "text-xl"
+                  }`}
+                >
+                  완전한 투명성
+                </h3>
+                <p
+                  className={`text-navy-600 leading-relaxed ${
+                    isMobile ? "text-sm" : "text-base"
+                  }`}
+                >
+                  모든 회계 내역이 공개되어 학우들이 언제든지 확인하고 검증할 수
+                  있습니다.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-8 sm:mt-12 text-center">
+              <div className="inline-flex items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 rounded-xl bg-emerald-50 border border-emerald-200">
+                <Wallet className="w-5 h-5 text-emerald-600" />
+                <p
+                  className={`text-emerald-700 font-semibold ${
+                    isMobile ? "text-sm" : "text-base"
+                  }`}
+                >
+                  토스 모임통장으로 운영되는 투명한 학생 자치 기구
+                </p>
+              </div>
             </div>
           </div>
         </div>
