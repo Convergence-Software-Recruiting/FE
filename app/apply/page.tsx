@@ -31,6 +31,20 @@ interface PersonalInfo {
   phone: string;
 }
 
+const MAJOR_OPTIONS = [
+  { value: "CONVERGENCE_SOFTWARE_UNDERGRAD", label: "융합소프트웨어 학부(학부생)" },
+  { value: "APPLIED_SOFTWARE", label: "응용소프트웨어전공" },
+  { value: "DATA_SCIENCE", label: "데이터사이언스 전공" },
+  { value: "AI", label: "AI 전공" },
+] as const;
+
+const MAJOR_TO_API: Record<string, string> = {
+  CONVERGENCE_SOFTWARE_UNDERGRAD: "CONVERGENCE_SOFTWARE",
+  APPLIED_SOFTWARE: "CONVERGENCE_SOFTWARE",
+  DATA_SCIENCE: "CONVERGENCE_SOFTWARE",
+  AI: "CONVERGENCE_SOFTWARE",
+};
+
 // ============================================================================
 // 메인 컴포넌트
 // ============================================================================
@@ -51,7 +65,7 @@ export default function ApplyPage() {
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({
     name: "",
     studentNo: "",
-    major: "CONVERGENCE_SOFTWARE",
+    major: MAJOR_OPTIONS[0].value,
     grade: "",
     phone: "",
   });
@@ -114,6 +128,7 @@ export default function ApplyPage() {
     if (
       !personalInfo.name.trim() ||
       !personalInfo.studentNo.trim() ||
+      !personalInfo.major ||
       !personalInfo.grade ||
       !personalInfo.phone.trim()
     ) {
@@ -146,34 +161,48 @@ export default function ApplyPage() {
       setIsSubmitting(true);
       setError(null);
 
-      try {
-        const payload: ApplicationSubmitRequest = {
-          name: personalInfo.name.trim(),
-          studentNo: personalInfo.studentNo.trim(),
-          major: personalInfo.major,
-          grade: personalInfo.grade,
-          phone: personalInfo.phone.trim(),
-          answers: Object.entries(answers)
-            .filter(([_, value]) => value && value.trim())
-            .map(([questionId, value]) => ({
-              questionId: Number(questionId),
-              value: value.trim(),
-            })),
-        };
+      const payload: ApplicationSubmitRequest = {
+        name: personalInfo.name.trim(),
+        studentNo: personalInfo.studentNo.trim(),
+        major: MAJOR_TO_API[personalInfo.major] ?? "CONVERGENCE_SOFTWARE",
+        grade: personalInfo.grade,
+        phone: personalInfo.phone.trim(),
+        answers: Object.entries(answers)
+          .filter(([_, value]) => value && value.trim())
+          .map(([questionId, value]) => ({
+            questionId: Number(questionId),
+            value: value.trim(),
+          })),
+      };
 
+      try {
+        if (process.env.NODE_ENV === "development") {
+          console.log("[apply] submitting payload:", payload);
+        }
         const response: ApplicationSubmitResponse =
           await submitApplication(payload);
         setResultCode(response.resultCode);
         setSubmitSuccess(true);
       } catch (err) {
-        const axiosError = err as AxiosError<{ message?: string }>;
-        if (axiosError.response?.status === 409) {
+        const axiosError = err as AxiosError<{ message?: string; errors?: Record<string, string[]> }>;
+        const status = axiosError.response?.status;
+        const data = axiosError.response?.data as { message?: string; errors?: Record<string, string[]> } | undefined;
+        const serverMessage = data?.message;
+        const errors = data?.errors;
+        if (status === 409) {
           setError("이미 지원서를 제출하셨습니다.");
-        } else if (axiosError.response?.status === 400) {
-          setError("입력 정보를 확인해주세요.");
+        } else if (status === 400) {
+          const detail = serverMessage
+            || (errors && Object.values(errors).flat().length > 0
+              ? Object.values(errors!).flat().join(" ")
+              : null);
+          setError(detail || "입력 정보를 확인해주세요.");
+          if (process.env.NODE_ENV === "development") {
+            console.error("[apply 400] payload:", payload, "response:", data);
+          }
         } else {
           setError(
-            axiosError.response?.data?.message ||
+            serverMessage ||
               axiosError.message ||
               "지원서 제출에 실패했습니다.",
           );
@@ -217,7 +246,6 @@ export default function ApplyPage() {
     );
   }
 
-  // 제출 성공
   if (submitSuccess && resultCode) {
     return (
       <SuccessState
@@ -227,10 +255,6 @@ export default function ApplyPage() {
         primaryAction={{
           label: "메인으로 돌아가기",
           onClick: () => router.push("/"),
-        }}
-        secondaryAction={{
-          label: "지원 결과 조회",
-          onClick: () => router.push("/apply/result"),
         }}
       />
     );
@@ -406,7 +430,11 @@ function PersonalInfoSection({
           onChange={(e) => onChange("major", e.target.value)}
           className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
         >
-          <option value="CONVERGENCE_SOFTWARE">융합소프트웨어</option>
+          {MAJOR_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
         </select>
       </div>
 
