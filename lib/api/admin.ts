@@ -65,6 +65,37 @@ export interface AdminQuestionResponse {
   createdAt: string;
 }
 
+export interface AdminApplicationSummary {
+  applicationId: number;
+  name: string;
+  studentNo: string;
+  major: string; // e.g. 'CONVERGENCE_SOFTWARE'
+  grade: string; // e.g. 'GRADE_1' | 'GRADE_2' | ...
+  status: string; // e.g. 'RECEIVED'
+  submittedAt: string;
+}
+
+export interface AdminApplicationAnswer {
+  questionId: number;
+  value: string;
+}
+
+export interface AdminApplicationDetail {
+  applicationId: number;
+  formId: number;
+  name: string;
+  studentNo: string;
+  major: string;
+  grade: string;
+  phone: string;
+  status: string;
+  adminMemo: string | null;
+  submittedAt: string;
+  answers: AdminApplicationAnswer[];
+}
+
+export type AdminApplicationListResponse = AdminApplicationSummary[];
+
 // ============================================================================
 // API 함수
 // ============================================================================
@@ -209,4 +240,59 @@ export async function deactivateAdminForms(): Promise<void> {
  */
 export async function openAdminFormResult(formId: number): Promise<void> {
   await apiClient.patch(`/api/admin/forms/${formId}/result-open`);
+}
+
+// ============================================================================
+// 지원서 관리 API
+// ============================================================================
+
+/**
+ * 지원서 목록 조회
+ */
+export async function fetchAdminApplications(): Promise<AdminApplicationListResponse> {
+  const res = await apiClient.get<AdminApplicationListResponse>(
+    '/api/admin/applications',
+  );
+  return res.data;
+}
+
+/**
+ * 지원서 상세 조회
+ * @param applicationId 지원서 ID
+ */
+export async function fetchAdminApplicationDetail(
+  applicationId: number,
+): Promise<AdminApplicationDetail> {
+  const res = await apiClient.get<AdminApplicationDetail>(
+    `/api/admin/applications/${applicationId}`,
+  );
+  return res.data;
+}
+
+/**
+ * 지원서 상태 변경
+ * @param applicationId 지원서 ID
+ * @param status 변경할 상태 값 (예: 'RECEIVED')
+ */
+export async function updateAdminApplicationStatus(
+  applicationId: number,
+  status: string,
+): Promise<void> {
+  await apiClient.patch(`/api/admin/applications/${applicationId}/status`, {
+    status,
+  });
+}
+
+/**
+ * 지원서 메모 저장/수정
+ * @param applicationId 지원서 ID
+ * @param adminMemo 메모 내용
+ */
+export async function updateAdminApplicationMemo(
+  applicationId: number,
+  adminMemo: string,
+): Promise<void> {
+  await apiClient.patch(`/api/admin/applications/${applicationId}/memo`, {
+    adminMemo,
+  });
 }

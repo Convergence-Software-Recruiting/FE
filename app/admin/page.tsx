@@ -158,12 +158,25 @@ export default function AdminPage() {
 
               <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 pt-2">
                 <Link href="/admin/forms">
-                  <Button variant="hero" size={isMobile ? 'lg' : 'xl'}>
+                  <Button variant="hero" size={isMobile ? 'lg' : 'xl'} className="shadow-xl">
                     모집 폼 관리
                   </Button>
                 </Link>
+                <Link href="/admin/applications">
+                  <Button
+                    variant="heroOutline"
+                    size={isMobile ? 'lg' : 'xl'}
+                    className="shadow-xl"
+                  >
+                    지원서 관리
+                  </Button>
+                </Link>
                 <Link href="/">
-                  <Button variant="heroOutline" size={isMobile ? 'lg' : 'xl'}>
+                  <Button
+                    variant="ghost"
+                    size={isMobile ? 'lg' : 'xl'}
+                    className="text-white/80 hover:text-white hover:bg-white/10"
+                  >
                     메인으로
                   </Button>
                 </Link>

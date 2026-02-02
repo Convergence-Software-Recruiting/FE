@@ -28,9 +28,14 @@ const pretendard = localFont({
 });
 
 const siteTitle = "융합소프트웨어 비상대책위원회";
-const siteDescription = "명지대학교 융합소프트웨어학부의 변화를 이끄는 학생 자치 기구";
+const siteDescription =
+  "명지대학교 융합소프트웨어학부의 변화를 이끄는 학생 자치 기구";
+
+const baseUrl =
+  process.env.NEXT_PUBLIC_APP_URL || "https://recruit.bluerack.org";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
   title: siteTitle,
   description: siteDescription,
   icons: {
@@ -42,12 +47,22 @@ export const metadata: Metadata = {
     title: siteTitle,
     description: siteDescription,
     type: "website",
-    images: [{ url: "/logos/mjuSWLogo.png", width: 512, height: 512, alt: siteTitle }],
+    url: baseUrl,
+    siteName: siteTitle,
+    images: [
+      {
+        url: "/logos/mjuSWLogo.png",
+        width: 512,
+        height: 512,
+        alt: siteTitle,
+      },
+    ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
+    images: ["/logos/mjuSWLogo.png"],
   },
 };
 
@@ -70,4 +85,3 @@ export default async function RootLayout({
     </html>
   );
 }
-
