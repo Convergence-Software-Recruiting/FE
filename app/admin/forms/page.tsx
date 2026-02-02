@@ -210,11 +210,31 @@ export default function AdminFormsPage() {
               </p>
             </div>
 
-            {/* 폼 생성 카드 */}
+            {/* 상단 액션 + 폼 생성 카드 */}
             <div className="bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 p-6 sm:p-8 shadow-2xl space-y-5">
-              <div className="flex items-center gap-3 text-white">
-                <FilePlus2 className="w-6 h-6 text-gold-400" />
-                <h2 className="text-lg sm:text-xl font-bold">새 모집 폼 만들기</h2>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-white">
+                <div className="flex items-center gap-3">
+                  <FilePlus2 className="w-6 h-6 text-gold-400" />
+                  <h2 className="text-lg sm:text-xl font-bold">새 모집 폼 만들기</h2>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    variant="heroOutline"
+                    size={isMobile ? 'sm' : 'md'}
+                    className="shadow-xl"
+                    onClick={() => router.push('/admin/applications')}
+                  >
+                    지원서 목록 보기
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size={isMobile ? 'sm' : 'md'}
+                    className="text-white/80 hover:text-white hover:bg-white/10"
+                    onClick={() => router.push('/admin')}
+                  >
+                    어드민 홈
+                  </Button>
+                </div>
               </div>
 
               <div className="space-y-4">
