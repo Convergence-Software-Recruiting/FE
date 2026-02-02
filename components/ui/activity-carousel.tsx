@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useResponsive } from "@/hooks/useResponsive";
@@ -25,37 +25,66 @@ export default function ActivityCarousel({
 }: ActivityCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const isTransitioningRef = useRef(false);
   const { isMobile, isTablet } = useResponsive();
+
+  const handleNext = () => {
+    if (isTransitioningRef.current) return;
+    isTransitioningRef.current = true;
+    setIsTransitioning(true);
+    setCurrentIndex((prev) => {
+      const next = (prev + 1) % images.length;
+      setTimeout(() => {
+        isTransitioningRef.current = false;
+        setIsTransitioning(false);
+      }, 500);
+      return next;
+    });
+  };
+
+  const handlePrev = () => {
+    if (isTransitioningRef.current) return;
+    isTransitioningRef.current = true;
+    setIsTransitioning(true);
+    setCurrentIndex((prev) => {
+      const next = (prev - 1 + images.length) % images.length;
+      setTimeout(() => {
+        isTransitioningRef.current = false;
+        setIsTransitioning(false);
+      }, 500);
+      return next;
+    });
+  };
 
   useEffect(() => {
     if (!autoPlay || images.length <= 1) return;
 
     const interval = setInterval(() => {
-      handleNext();
+      if (isTransitioningRef.current) return;
+      isTransitioningRef.current = true;
+      setIsTransitioning(true);
+      setCurrentIndex((prev) => {
+        const next = (prev + 1) % images.length;
+        setTimeout(() => {
+          isTransitioningRef.current = false;
+          setIsTransitioning(false);
+        }, 500);
+        return next;
+      });
     }, autoPlayInterval);
 
     return () => clearInterval(interval);
-  }, [autoPlay, autoPlayInterval, currentIndex, images.length]);
-
-  const handleNext = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentIndex((prev) => (prev + 1) % images.length);
-    setTimeout(() => setIsTransitioning(false), 500);
-  };
-
-  const handlePrev = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-    setTimeout(() => setIsTransitioning(false), 500);
-  };
+  }, [autoPlay, autoPlayInterval, images.length]);
 
   const goToSlide = (index: number) => {
-    if (isTransitioning || index === currentIndex) return;
+    if (isTransitioningRef.current || index === currentIndex) return;
+    isTransitioningRef.current = true;
     setIsTransitioning(true);
     setCurrentIndex(index);
-    setTimeout(() => setIsTransitioning(false), 500);
+    setTimeout(() => {
+      isTransitioningRef.current = false;
+      setIsTransitioning(false);
+    }, 500);
   };
 
   if (images.length === 0) return null;
@@ -83,6 +112,7 @@ export default function ActivityCarousel({
                 fill
                 className="object-cover"
                 priority={index === currentIndex}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-navy-900/80 via-navy-900/20 to-transparent" />
             </div>
