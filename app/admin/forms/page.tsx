@@ -220,7 +220,7 @@ export default function AdminFormsPage() {
                 <div className="flex flex-wrap gap-2">
                   <Button
                     variant="heroOutline"
-                    size={isMobile ? 'sm' : 'md'}
+                    size={isMobile ? 'sm' : 'default'}
                     className="shadow-xl"
                     onClick={() => router.push('/admin/applications')}
                   >
@@ -228,7 +228,7 @@ export default function AdminFormsPage() {
                   </Button>
                   <Button
                     variant="ghost"
-                    size={isMobile ? 'sm' : 'md'}
+                    size={isMobile ? 'sm' : 'default'}
                     className="text-white/80 hover:text-white hover:bg-white/10"
                     onClick={() => router.push('/admin')}
                   >

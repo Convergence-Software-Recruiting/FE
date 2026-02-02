@@ -218,7 +218,7 @@ export default function AdminApplicationsPage() {
               <div className="flex flex-wrap gap-2 sm:gap-3">
                 <Button
                   variant="heroOutline"
-                  size={isMobile ? 'lg' : 'md'}
+                  size={isMobile ? 'lg' : 'default'}
                   onClick={loadApplications}
                   className="shadow-xl px-3 py-2 sm:px-3 sm:py-2"
                   aria-label="목록 새로고침"
@@ -227,7 +227,7 @@ export default function AdminApplicationsPage() {
                 </Button>
                 <Button
                   variant="ghost"
-                  size={isMobile ? 'sm' : 'md'}
+                  size={isMobile ? 'sm' : 'default'}
                   className="text-white/80 hover:text-white hover:bg-white/10"
                   onClick={() => router.push('/admin/forms')}
                 >
@@ -235,7 +235,7 @@ export default function AdminApplicationsPage() {
                 </Button>
                 <Button
                   variant="ghost"
-                  size={isMobile ? 'sm' : 'md'}
+                  size={isMobile ? 'sm' : 'default'}
                   className="text-white/80 hover:text-white hover:bg-white/10"
                   onClick={() => router.push('/admin')}
                 >
