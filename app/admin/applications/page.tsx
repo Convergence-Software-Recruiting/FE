@@ -160,8 +160,10 @@ export default function AdminApplicationsPage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <ErrorState
               title="지원서 목록을 불러오는 중 오류가 발생했습니다."
-              description={error}
+              message={error}
+              showRetry={true}
               onRetry={loadApplications}
+              retryLabel="다시 시도"
             />
           </div>
         </div>

@@ -221,8 +221,10 @@ export default function AdminApplicationDetailPage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <ErrorState
               title="지원서 상세 정보를 불러오는 중 오류가 발생했습니다."
-              description={error ?? '지원서를 찾을 수 없습니다.'}
+              message={error ?? '지원서를 찾을 수 없습니다.'}
+              showRetry={true}
               onRetry={() => router.push('/admin/applications')}
+              retryLabel="목록으로 돌아가기"
             />
           </div>
         </div>
