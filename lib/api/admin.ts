@@ -278,9 +278,18 @@ export async function updateAdminApplicationStatus(
   applicationId: number,
   status: string,
 ): Promise<void> {
-  await apiClient.patch(`/api/admin/applications/${applicationId}/status`, {
-    status,
-  });
+  const response = await apiClient.patch(
+    `/api/admin/applications/${applicationId}/status`,
+    { status },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[updateAdminApplicationStatus] 응답:', response.data);
+  }
 }
 
 /**
@@ -292,7 +301,16 @@ export async function updateAdminApplicationMemo(
   applicationId: number,
   adminMemo: string,
 ): Promise<void> {
-  await apiClient.patch(`/api/admin/applications/${applicationId}/memo`, {
-    adminMemo,
-  });
+  const response = await apiClient.patch(
+    `/api/admin/applications/${applicationId}/memo`,
+    { adminMemo },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[updateAdminApplicationMemo] 응답:', response.data);
+  }
 }
