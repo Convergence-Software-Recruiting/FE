@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { FileText, ArrowLeft, Loader2, Lock } from 'lucide-react';
+import { FileText, ArrowLeft, Loader2, Lock, CheckCircle2, XCircle } from 'lucide-react';
+import { toast } from 'sonner';
 import { useResponsive } from '@/hooks/useResponsive';
 import { useAuth } from '@/contexts/AuthContext';
 import { BackgroundPattern } from '@/components/ui/background-pattern';
@@ -29,8 +30,8 @@ function formatDateTime(dateString: string): string {
 const STATUS_OPTIONS: { value: string; label: string }[] = [
   { value: 'RECEIVED', label: '접수 완료' },
   { value: 'UNDER_REVIEW', label: '검토 중' },
-  { value: 'ACCEPTED', label: '합격' },
-  { value: 'REJECTED', label: '불합격' },
+  { value: 'PASS', label: '합격' },
+  { value: 'FAIL', label: '불합격' },
 ];
 
 function getStatusBadgeClass(status: string): string {
@@ -39,9 +40,9 @@ function getStatusBadgeClass(status: string): string {
       return 'bg-sky-400/20 text-sky-100';
     case 'UNDER_REVIEW':
       return 'bg-amber-400/20 text-amber-100';
-    case 'ACCEPTED':
+    case 'PASS':
       return 'bg-emerald-400/20 text-emerald-100';
-    case 'REJECTED':
+    case 'FAIL':
       return 'bg-rose-500/20 text-rose-100';
     default:
       return 'bg-white/10 text-white/80';
@@ -66,7 +67,6 @@ export default function AdminApplicationDetailPage() {
 
   const [adminMemo, setAdminMemo] = useState('');
   const [isSavingMemo, setIsSavingMemo] = useState(false);
-  const [memoMessage, setMemoMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (!Number.isFinite(applicationId)) {
@@ -105,13 +105,33 @@ export default function AdminApplicationDetailPage() {
 
     setIsUpdatingStatus(true);
     setError(null);
+    const statusLabel = STATUS_OPTIONS.find((s) => s.value === nextStatus)?.label ?? nextStatus;
+    
     try {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[AdminApplicationDetailPage] 상태 변경 요청:', {
+          applicationId: application.applicationId,
+          status: nextStatus,
+        });
+      }
       await updateAdminApplicationStatus(application.applicationId, nextStatus);
       setStatus(nextStatus);
       setApplication({ ...application, status: nextStatus });
-    } catch (err) {
+      toast.success('상태가 변경되었습니다', {
+        description: `지원서 상태가 "${statusLabel}"로 변경되었습니다.`,
+        icon: <CheckCircle2 className="w-5 h-5" />,
+      });
+    } catch (err: unknown) {
       console.error('[AdminApplicationDetailPage] 상태 변경 실패:', err);
-      setError('지원서 상태를 변경하는 중 오류가 발생했습니다.');
+      const axiosError = err as { response?: { data?: { message?: string } } };
+      const errorMessage =
+        axiosError.response?.data?.message ||
+        '지원서 상태를 변경하는 중 오류가 발생했습니다.';
+      setError(errorMessage);
+      toast.error('상태 변경 실패', {
+        description: errorMessage,
+        icon: <XCircle className="w-5 h-5" />,
+      });
     } finally {
       setIsUpdatingStatus(false);
     }
@@ -122,15 +142,24 @@ export default function AdminApplicationDetailPage() {
 
     setIsSavingMemo(true);
     setError(null);
-    setMemoMessage(null);
     try {
       await updateAdminApplicationMemo(application.applicationId, adminMemo);
       setApplication({ ...application, adminMemo });
-      setMemoMessage('메모가 저장되었습니다.');
-      setTimeout(() => setMemoMessage(null), 2500);
-    } catch (err) {
+      toast.success('메모가 저장되었습니다', {
+        description: '지원서 메모가 성공적으로 저장되었습니다.',
+        icon: <CheckCircle2 className="w-5 h-5" />,
+      });
+    } catch (err: unknown) {
       console.error('[AdminApplicationDetailPage] 메모 저장 실패:', err);
-      setError('지원서 메모를 저장하는 중 오류가 발생했습니다.');
+      const axiosError = err as { response?: { data?: { message?: string } } };
+      const errorMessage =
+        axiosError.response?.data?.message ||
+        '지원서 메모를 저장하는 중 오류가 발생했습니다.';
+      setError(errorMessage);
+      toast.error('메모 저장 실패', {
+        description: errorMessage,
+        icon: <XCircle className="w-5 h-5" />,
+      });
     } finally {
       setIsSavingMemo(false);
     }
@@ -375,11 +404,6 @@ export default function AdminApplicationDetailPage() {
                 />
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
-                    {memoMessage && (
-                      <div className="text-emerald-200 text-xs sm:text-sm">
-                        {memoMessage}
-                      </div>
-                    )}
                     {error && (
                       <div className="text-red-200 text-xs sm:text-sm">
                         {error}

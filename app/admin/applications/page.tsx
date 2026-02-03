@@ -30,9 +30,9 @@ function formatStatus(status: string): string {
       return '접수 완료';
     case 'UNDER_REVIEW':
       return '검토 중';
-    case 'ACCEPTED':
+    case 'PASS':
       return '합격';
-    case 'REJECTED':
+    case 'FAIL':
       return '불합격';
     default:
       return status;
