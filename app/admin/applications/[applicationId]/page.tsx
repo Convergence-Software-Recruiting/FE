@@ -531,14 +531,27 @@ export default function AdminApplicationDetailPage() {
                       key={answer.questionId}
                       className="bg-white/5 rounded-2xl border border-white/10 p-4 sm:p-5"
                     >
-                      <p className="text-white/70 text-xs sm:text-sm mb-1">
-                        {questionLabels[answer.questionId]
-                          ? questionLabels[answer.questionId]
-                          : `질문 ID ${answer.questionId}`}
-                      </p>
-                      <p className="text-white text-sm sm:text-base whitespace-pre-line">
-                        {answer.value}
-                      </p>
+                      <div className="space-y-3">
+                        <div className="space-y-1">
+                          <p className="text-white/60 text-[11px] sm:text-xs font-medium tracking-wide">
+                            질문
+                          </p>
+                          <p className="text-white/85 text-xs sm:text-sm leading-relaxed">
+                            {questionLabels[answer.questionId]
+                              ? questionLabels[answer.questionId]
+                              : `질문 ID ${answer.questionId}`}
+                          </p>
+                        </div>
+
+                        <div className="rounded-xl bg-white/10 border border-white/20 p-3 sm:p-4">
+                          <p className="text-white/60 text-[11px] sm:text-xs font-medium tracking-wide">
+                            답변
+                          </p>
+                          <p className="mt-1 text-white text-sm sm:text-base whitespace-pre-line leading-relaxed">
+                            {answer.value?.trim() ? answer.value : '미입력'}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
