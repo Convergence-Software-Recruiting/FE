@@ -26,9 +26,14 @@ import type { AxiosError } from "axios";
 interface PersonalInfo {
   name: string;
   studentNo: string;
+  birthDate: string;
+  gender: string;
   major: string;
   grade: string;
   phone: string;
+  firstChoice: string;
+  secondChoice: string;
+  thirdChoice: string;
 }
 
 const MAJOR_OPTIONS = [
@@ -44,6 +49,52 @@ const MAJOR_TO_API: Record<string, string> = {
   DATA_SCIENCE: "CONVERGENCE_SOFTWARE",
   AI: "CONVERGENCE_SOFTWARE",
 };
+
+const GENDER_OPTIONS = [
+  { value: "MALE", label: "남성" },
+  { value: "FEMALE", label: "여성" },
+] as const;
+
+const DEPARTMENT_OPTIONS = [
+  { value: "PLANNING", label: "기획국" },
+  { value: "EXTERNAL_COOPERATION", label: "대외협력국" },
+  { value: "WELFARE", label: "복지국" },
+  { value: "SECRETARIAT", label: "사무국" },
+  { value: "PUBLIC_RELATIONS", label: "홍보국" },
+] as const;
+
+function isValidBirthDate(value: string): boolean {
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return false;
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const date = new Date(Date.UTC(year, month - 1, day));
+
+  return (
+    date.getUTCFullYear() === year &&
+    date.getUTCMonth() === month - 1 &&
+    date.getUTCDate() === day
+  );
+}
+
+function formatBirthDateInput(value: string): string {
+  const digits = value.replace(/\D/g, "").slice(0, 8);
+  if (digits.length <= 4) return digits;
+  if (digits.length <= 6) return `${digits.slice(0, 4)}-${digits.slice(4)}`;
+  return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6)}`;
+}
+
+function formatPhoneInput(value: string): string {
+  const digits = value.replace(/\D/g, "").slice(0, 11);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 7) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  if (digits.length <= 10) {
+    return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+  }
+  return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
+}
 
 // ============================================================================
 // 메인 컴포넌트
@@ -65,9 +116,14 @@ export default function ApplyPage() {
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({
     name: "",
     studentNo: "",
+    birthDate: "",
+    gender: "",
     major: MAJOR_OPTIONS[0].value,
     grade: "",
     phone: "",
+    firstChoice: "",
+    secondChoice: "",
+    thirdChoice: "",
   });
 
   // 질문 답변
@@ -109,7 +165,37 @@ export default function ApplyPage() {
 
   const handlePersonalInfoChange = useCallback(
     (field: keyof PersonalInfo, value: string) => {
-      setPersonalInfo((prev) => ({ ...prev, [field]: value }));
+      const normalizedValue =
+        field === "birthDate"
+          ? formatBirthDateInput(value)
+          : field === "phone"
+            ? formatPhoneInput(value)
+            : value;
+
+      setPersonalInfo((prev) => {
+        const next = { ...prev, [field]: normalizedValue };
+
+        if (field === "firstChoice") {
+          if (next.secondChoice === normalizedValue) next.secondChoice = "";
+          if (next.thirdChoice === normalizedValue) next.thirdChoice = "";
+        }
+
+        if (field === "secondChoice") {
+          if (normalizedValue === next.firstChoice) next.secondChoice = "";
+          if (next.thirdChoice === normalizedValue) next.thirdChoice = "";
+        }
+
+        if (field === "thirdChoice") {
+          if (
+            normalizedValue === next.firstChoice ||
+            normalizedValue === next.secondChoice
+          ) {
+            next.thirdChoice = "";
+          }
+        }
+
+        return next;
+      });
     },
     [],
   );
@@ -128,11 +214,30 @@ export default function ApplyPage() {
     if (
       !personalInfo.name.trim() ||
       !personalInfo.studentNo.trim() ||
+      !personalInfo.birthDate ||
+      !personalInfo.gender ||
       !personalInfo.major ||
       !personalInfo.grade ||
-      !personalInfo.phone.trim()
+      !personalInfo.phone.trim() ||
+      !personalInfo.firstChoice ||
+      !personalInfo.secondChoice ||
+      !personalInfo.thirdChoice
     ) {
       return "필수 정보를 모두 입력해주세요.";
+    }
+
+    if (!isValidBirthDate(personalInfo.birthDate)) {
+      return "생년월일을 YYYY-MM-DD 형식으로 입력해주세요.";
+    }
+
+    if (
+      new Set([
+        personalInfo.firstChoice,
+        personalInfo.secondChoice,
+        personalInfo.thirdChoice,
+      ]).size < 3
+    ) {
+      return "지망 부서는 서로 다르게 선택해주세요.";
     }
 
     // 필수 질문 답변 검증
@@ -164,9 +269,14 @@ export default function ApplyPage() {
       const payload: ApplicationSubmitRequest = {
         name: personalInfo.name.trim(),
         studentNo: personalInfo.studentNo.trim(),
+        birthDate: personalInfo.birthDate,
+        gender: personalInfo.gender,
         major: MAJOR_TO_API[personalInfo.major] ?? "CONVERGENCE_SOFTWARE",
         grade: personalInfo.grade,
         phone: personalInfo.phone.trim(),
+        firstChoice: personalInfo.firstChoice,
+        secondChoice: personalInfo.secondChoice,
+        thirdChoice: personalInfo.thirdChoice,
         answers: Object.entries(answers)
           .filter(([_, value]) => value && value.trim())
           .map(([questionId, value]) => ({
@@ -379,6 +489,19 @@ function PersonalInfoSection({
   onChange,
   isMobile,
 }: PersonalInfoSectionProps) {
+  const secondChoiceOptions = DEPARTMENT_OPTIONS.filter(
+    (opt) =>
+      opt.value === personalInfo.secondChoice ||
+      opt.value !== personalInfo.firstChoice,
+  );
+
+  const thirdChoiceOptions = DEPARTMENT_OPTIONS.filter(
+    (opt) =>
+      opt.value === personalInfo.thirdChoice ||
+      (opt.value !== personalInfo.firstChoice &&
+        opt.value !== personalInfo.secondChoice),
+  );
+
   return (
     <div className="space-y-4 sm:space-y-6">
       <h2 className="text-white font-bold text-lg sm:text-xl mb-4 flex items-center">
@@ -416,6 +539,46 @@ function PersonalInfoSection({
           placeholder="학번을 입력하세요 (예: 202312345)"
           className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 placeholder-navy-500 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
         />
+      </div>
+
+      <div>
+        <label className="block mb-2">
+          <span className="text-white font-semibold text-sm sm:text-base">
+            생년월일 <span className="text-gold-400">*</span>
+          </span>
+        </label>
+        <input
+          type="text"
+          required
+          value={personalInfo.birthDate}
+          onChange={(e) => onChange("birthDate", e.target.value)}
+          placeholder="YYYY-MM-DD"
+          inputMode="numeric"
+          pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+          maxLength={10}
+          className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 placeholder-navy-500 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
+        />
+      </div>
+
+      <div>
+        <label className="block mb-2">
+          <span className="text-white font-semibold text-sm sm:text-base">
+            성별 <span className="text-gold-400">*</span>
+          </span>
+        </label>
+        <select
+          required
+          value={personalInfo.gender}
+          onChange={(e) => onChange("gender", e.target.value)}
+          className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
+        >
+          <option value="">선택하세요</option>
+          {GENDER_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>
@@ -472,6 +635,75 @@ function PersonalInfoSection({
           placeholder="전화번호를 입력하세요 (예: 010-1234-5678)"
           className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 placeholder-navy-500 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
         />
+      </div>
+
+      <div>
+        <label className="block mb-2">
+          <span className="text-white font-semibold text-sm sm:text-base">
+            1지망 부서 <span className="text-gold-400">*</span>
+          </span>
+        </label>
+        <select
+          required
+          value={personalInfo.firstChoice}
+          onChange={(e) => onChange("firstChoice", e.target.value)}
+          className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
+        >
+          <option value="" disabled>
+            선택하세요.
+          </option>
+          {DEPARTMENT_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label className="block mb-2">
+          <span className="text-white font-semibold text-sm sm:text-base">
+            2지망 부서 <span className="text-gold-400">*</span>
+          </span>
+        </label>
+        <select
+          required
+          value={personalInfo.secondChoice}
+          onChange={(e) => onChange("secondChoice", e.target.value)}
+          className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
+        >
+          <option value="" disabled>
+            선택하세요.
+          </option>
+          {secondChoiceOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label className="block mb-2">
+          <span className="text-white font-semibold text-sm sm:text-base">
+            3지망 부서 <span className="text-gold-400">*</span>
+          </span>
+        </label>
+        <select
+          required
+          value={personalInfo.thirdChoice}
+          onChange={(e) => onChange("thirdChoice", e.target.value)}
+          className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
+        >
+          <option value="" disabled>
+            선택하세요.
+          </option>
+          {thirdChoiceOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );

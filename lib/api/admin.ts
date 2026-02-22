@@ -178,6 +178,14 @@ export async function fetchAdminFormDetail(
 }
 
 /**
+ * 모집 폼 삭제
+ * @param formId 폼 ID
+ */
+export async function deleteAdminForm(formId: number): Promise<void> {
+  await apiClient.delete(`/api/admin/forms/${formId}`);
+}
+
+/**
  * 폼에 질문 추가 (한 번에 한 개)
  * @param formId 폼 ID
  * @param payload 질문 정보

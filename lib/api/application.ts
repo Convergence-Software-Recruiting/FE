@@ -25,9 +25,14 @@ export interface FormQuestion {
 export interface ApplicationSubmitRequest {
   name: string;
   studentNo: string;
+  birthDate: string; // yyyy-MM-dd
+  gender: string; // 'MALE' | 'FEMALE'
   major: string; // 'CONVERGENCE_SOFTWARE' 등
   grade: string; // 'GRADE_1' | 'GRADE_2' | 'GRADE_3' | 'GRADE_4'
   phone: string;
+  firstChoice: string; // Department enum
+  secondChoice: string; // Department enum
+  thirdChoice: string; // Department enum
   answers: ApplicationAnswer[];
 }
 

@@ -7,19 +7,40 @@ import { useResponsive } from '@/hooks/useResponsive';
 import { useAuth } from '@/contexts/AuthContext';
 import { BackgroundPattern } from '@/components/ui/background-pattern';
 import { Button } from '@/components/ui/button';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { ErrorState } from '@/components/ui/error-state';
 import { LoadingState } from '@/components/ui/loading-state';
 import {
   createAdminForm,
+  deleteAdminForm,
   fetchAdminForms,
   type AdminFormResponse,
 } from '@/lib/api/admin';
-import { ClipboardList, FilePlus2, Loader2, ArrowRight, Lock } from 'lucide-react';
+import {
+  ClipboardList,
+  FilePlus2,
+  Loader2,
+  ArrowRight,
+  Lock,
+  Trash2,
+} from 'lucide-react';
 import type { AxiosError } from 'axios';
 
 // ============================================================================
 // 메인 컴포넌트
 // ============================================================================
+
+function getDeleteErrorMessage(err: unknown): string {
+  const axiosError = err as AxiosError<{ message?: string }>;
+  if (axiosError.response?.status === 404) {
+    return '이미 삭제되었거나 존재하지 않는 모집 폼입니다.';
+  }
+  return (
+    axiosError.response?.data?.message ||
+    axiosError.message ||
+    '모집 폼 삭제 중 오류가 발생했습니다.'
+  );
+}
 
 export default function AdminFormsPage() {
   const { isMobile, isTablet } = useResponsive();
@@ -33,6 +54,8 @@ export default function AdminFormsPage() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isCreating, setIsCreating] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<AdminFormResponse | null>(null);
+  const [isDeletingForm, setIsDeletingForm] = useState(false);
 
   const loadForms = useCallback(async () => {
     try {
@@ -90,6 +113,21 @@ export default function AdminFormsPage() {
       setIsCreating(false);
     }
   }, [title, description, router]);
+
+  const handleDeleteForm = useCallback(async () => {
+    if (!deleteTarget) return;
+    setIsDeletingForm(true);
+    setError(null);
+    try {
+      await deleteAdminForm(deleteTarget.id);
+      setForms((prev) => prev.filter((form) => form.id !== deleteTarget.id));
+      setDeleteTarget(null);
+    } catch (err) {
+      setError(getDeleteErrorMessage(err));
+    } finally {
+      setIsDeletingForm(false);
+    }
+  }, [deleteTarget]);
 
   // ============================================================================
   // 렌더링
@@ -367,6 +405,15 @@ export default function AdminFormsPage() {
                               질문 관리
                             </Button>
                           </Link>
+                          <Button
+                            variant="heroOutline"
+                            size="lg"
+                            onClick={() => setDeleteTarget(form)}
+                            className="border-red-300 text-red-200 hover:border-red-400 hover:bg-red-500/20 hover:text-red-100"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            삭제
+                          </Button>
                           <Link href="/admin">
                             <Button variant="heroOutline" size="lg">
                               어드민 홈
@@ -382,6 +429,20 @@ export default function AdminFormsPage() {
           </div>
         </div>
       </div>
+      <ConfirmModal
+        open={Boolean(deleteTarget)}
+        title="모집 폼을 삭제하시겠어요?"
+        description={`삭제 시 질문/지원서/지원 답변이 모두 영구 삭제됩니다.${
+          deleteTarget ? `\n\n대상: ${deleteTarget.title}` : ''
+        }`}
+        confirmText="삭제"
+        cancelText="취소"
+        isLoading={isDeletingForm}
+        onConfirm={handleDeleteForm}
+        onClose={() => {
+          if (!isDeletingForm) setDeleteTarget(null);
+        }}
+      />
     </BackgroundPattern>
   );
 }
