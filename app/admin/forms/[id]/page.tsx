@@ -7,12 +7,14 @@ import { useResponsive } from '@/hooks/useResponsive';
 import { useAuth } from '@/contexts/AuthContext';
 import { BackgroundPattern } from '@/components/ui/background-pattern';
 import { Button } from '@/components/ui/button';
+import { ConfirmModal } from '@/components/ui/confirm-modal';
 import { ErrorState } from '@/components/ui/error-state';
 import { LoadingState } from '@/components/ui/loading-state';
 import {
   activateAdminForm,
   createAdminFormQuestion,
   deactivateAdminForms,
+  deleteAdminForm,
   deleteAdminQuestion,
   fetchAdminFormDetail,
   openAdminFormResult,
@@ -30,6 +32,7 @@ import {
   Plus,
   Trash2,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import type { AxiosError } from 'axios';
 
 // ============================================================================
@@ -40,6 +43,18 @@ interface QuestionDraft {
   label: string;
   description: string;
   required: boolean;
+}
+
+function getDeleteErrorMessage(err: unknown): string {
+  const axiosError = err as AxiosError<{ message?: string }>;
+  if (axiosError.response?.status === 404) {
+    return '이미 삭제되었거나 존재하지 않는 모집 폼입니다.';
+  }
+  return (
+    axiosError.response?.data?.message ||
+    axiosError.message ||
+    '모집 폼 삭제에 실패했습니다.'
+  );
 }
 
 export default function AdminFormDetailPage() {
@@ -66,6 +81,8 @@ export default function AdminFormDetailPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isFormUpdating, setIsFormUpdating] = useState(false);
   const [isResultUpdating, setIsResultUpdating] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeletingForm, setIsDeletingForm] = useState(false);
 
   const loadForm = useCallback(async () => {
     if (!Number.isFinite(formId)) {
@@ -290,6 +307,23 @@ export default function AdminFormDetailPage() {
     }
   }, [form, loadForm]);
 
+  const handleDeleteForm = useCallback(async () => {
+    if (!form) return;
+
+    setIsDeletingForm(true);
+    setActionError(null);
+    try {
+      await deleteAdminForm(form.id);
+      toast.success('모집 폼이 삭제되었습니다.');
+      router.push('/admin/forms');
+    } catch (err) {
+      setActionError(getDeleteErrorMessage(err));
+    } finally {
+      setIsDeletingForm(false);
+      setIsDeleteModalOpen(false);
+    }
+  }, [form, router]);
+
   // ============================================================================
   // 렌더링
   // ============================================================================
@@ -472,6 +506,16 @@ export default function AdminFormDetailPage() {
                   className="shadow-xl"
                 >
                   {form.resultOpen ? '결과 공개됨' : '결과 공개'}
+                </Button>
+                <Button
+                  variant="heroOutline"
+                  size={isMobile ? 'lg' : 'xl'}
+                  onClick={() => setIsDeleteModalOpen(true)}
+                  disabled={isDeletingForm}
+                  className="border-red-300 text-red-200 hover:border-red-400 hover:bg-red-500/20 hover:text-red-100"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  폼 삭제
                 </Button>
               </div>
             </div>
@@ -746,6 +790,18 @@ export default function AdminFormDetailPage() {
           </div>
         </div>
       </div>
+      <ConfirmModal
+        open={isDeleteModalOpen}
+        title="모집 폼을 삭제하시겠어요?"
+        description="삭제 시 질문/지원서/지원 답변이 모두 영구 삭제됩니다."
+        confirmText="삭제"
+        cancelText="취소"
+        isLoading={isDeletingForm}
+        onConfirm={handleDeleteForm}
+        onClose={() => {
+          if (!isDeletingForm) setIsDeleteModalOpen(false);
+        }}
+      />
     </BackgroundPattern>
   );
 }
