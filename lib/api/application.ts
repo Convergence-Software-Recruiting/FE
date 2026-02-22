@@ -51,10 +51,8 @@ export interface ApplicationResultRequest {
 }
 
 export interface ApplicationResultResponse {
-  applicationId: number;
-  status?: string; // 'PENDING' | 'ACCEPTED' | 'REJECTED'
-  result?: string;
-  [key: string]: unknown;
+  name: string;
+  status: string; // 'PASS' | 'FAIL'
 }
 
 // ============================================================================

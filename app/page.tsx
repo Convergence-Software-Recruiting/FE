@@ -13,14 +13,21 @@ import {
   ArrowRight,
   Shield,
   Search,
-  CheckCircle,
-  XCircle,
   Loader2,
   Lock,
 } from "lucide-react";
 import type { AxiosError } from "axios";
 
-const RESULT_LOOKUP_ENABLED = false;
+const RESULT_LOOKUP_ENABLED = true;
+const RESULT_CODE_REGEX = /^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{4}$/;
+
+function normalizeResultCode(value: string): string {
+  return value
+    .trim()
+    .toUpperCase()
+    .replace(/[^ABCDEFGHJKMNPQRSTUVWXYZ23456789]/g, "")
+    .slice(0, 4);
+}
 
 export default function Home() {
   const { isMobile, isTablet } = useResponsive();
@@ -33,9 +40,11 @@ export default function Home() {
     async (e: React.FormEvent) => {
       e.preventDefault();
       if (!RESULT_LOOKUP_ENABLED) return;
-      const code = resultCode.trim().toUpperCase();
-      if (!code) {
-        setResultError("결과 조회 코드 4자리를 입력해주세요.");
+      const code = normalizeResultCode(resultCode);
+      if (!RESULT_CODE_REGEX.test(code)) {
+        setResultError(
+          "결과 조회 코드는 영문/숫자 4자리입니다. (I, L, O, 0, 1 제외)",
+        );
         setResult(null);
         return;
       }
@@ -47,13 +56,19 @@ export default function Home() {
         setResult(data);
       } catch (err) {
         const axiosError = err as AxiosError<{ message?: string }>;
-        if (axiosError.response?.status === 404) {
-          setResultError("조회 결과를 찾을 수 없습니다. 코드를 확인해주세요.");
+        const status = axiosError.response?.status;
+        const serverMessage = (axiosError.response?.data as { message?: string })?.message;
+
+        if (status === 403) {
+          setResultError("아직 결과 공개 전입니다.");
+        } else if (status === 404) {
+          setResultError("결과 코드를 다시 확인해주세요.");
+        } else if (status === 409) {
+          setResultError("결과가 아직 확정되지 않았습니다.");
+        } else if (status === 400) {
+          setResultError(serverMessage || "결과 조회 코드 형식을 확인해주세요.");
         } else {
-          setResultError(
-            (axiosError.response?.data as { message?: string })?.message ||
-              "결과 조회에 실패했습니다. 결과 공개 이후에만 조회 가능합니다.",
-          );
+          setResultError(serverMessage || "결과 조회에 실패했습니다.");
         }
       } finally {
         setResultLoading(false);
@@ -296,14 +311,7 @@ export default function Home() {
                 <input
                   type="text"
                   value={resultCode}
-                  onChange={(e) =>
-                    setResultCode(
-                      e.target.value
-                        .replace(/[^A-Za-z0-9]/g, "")
-                        .slice(0, 4)
-                        .toUpperCase(),
-                    )
-                  }
+                  onChange={(e) => setResultCode(normalizeResultCode(e.target.value))}
                   placeholder="예: A4K3"
                   maxLength={4}
                   className="flex-1 px-4 py-3 rounded-xl bg-white/90 text-navy-900 placeholder-navy-500 border border-white/20 focus:outline-none focus:ring-2 focus:ring-gold-400 font-mono text-center text-lg disabled:opacity-60 disabled:cursor-not-allowed"
@@ -331,33 +339,44 @@ export default function Home() {
               )}
             </form>
             {RESULT_LOOKUP_ENABLED && result && (
-              <div className="mt-4 sm:mt-6 p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 text-center">
+              <div
+                className={`mt-6 rounded-2xl border border-white/10 border-l-4 ${
+                  ["ACCEPTED", "합격", "PASS"].includes(
+                    (result.status ?? "").toUpperCase(),
+                  )
+                    ? "border-l-emerald-400 bg-white/10"
+                    : ["REJECTED", "불합격", "FAIL"].includes(
+                          (result.status ?? "").toUpperCase(),
+                        )
+                      ? "border-l-rose-400 bg-white/5"
+                      : "border-l-white/30 bg-white/5"
+                } backdrop-blur-md shadow-lg p-4 sm:p-6 text-left leading-relaxed`}
+              >
                 {["ACCEPTED", "합격", "PASS"].includes(
                   (result.status ?? "").toUpperCase(),
                 ) ? (
                   <>
-                    <CheckCircle className="w-12 h-12 sm:w-14 sm:h-14 text-gold-400 mx-auto mb-2" />
-                    <p className="font-bold text-gold-400 text-xl sm:text-2xl">
-                      합격
+                    <p className="text-emerald-300 text-sm sm:text-base">
+                      <span className="font-semibold">{result.name}님</span>, 축하드립니다.
+                    </p>
+                    <p className="mt-2 text-white/90 text-sm sm:text-base">
+                      융합소프트웨어학부 비상대책위원회 모집에 최종 합격하셨습니다.
                     </p>
                   </>
                 ) : ["REJECTED", "불합격", "FAIL"].includes(
                     (result.status ?? "").toUpperCase(),
                   ) ? (
                   <>
-                    <XCircle className="w-12 h-12 sm:w-14 sm:h-14 text-red-400 mx-auto mb-2" />
-                    <p className="font-bold text-red-400 text-xl sm:text-2xl">
-                      불합격
+                    <p className="text-rose-300 text-sm sm:text-base">
+                      <span className="font-semibold">{result.name}님</span>, 소중한 시간 내어 지원해주셔서 감사합니다.
+                    </p>
+                    <p className="mt-2 text-white/90 text-sm sm:text-base">
+                      아쉽게도 이번 모집에서는 함께하지 못하게 되었습니다.
                     </p>
                   </>
                 ) : (
-                  <p className="font-bold text-white/80 text-xl sm:text-2xl">
-                    심사 중
-                  </p>
-                )}
-                {result.result && (
-                  <p className="mt-3 text-white/80 text-sm sm:text-base whitespace-pre-line">
-                    {result.result}
+                  <p className="text-white/90 text-sm sm:text-base">
+                    <span className="font-semibold">{result.name}님</span>, 심사 중입니다.
                   </p>
                 )}
               </div>

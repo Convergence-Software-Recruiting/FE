@@ -44,6 +44,11 @@ export interface AdminFormDetailResponse extends AdminFormResponse {
 
 export type AdminFormListResponse = AdminFormResponse[];
 
+export interface AdminFormResultOpenResponse {
+  formId: number;
+  resultOpen: boolean;
+}
+
 export interface AdminQuestionCreateRequest {
   label: string;
   description?: string | null;
@@ -246,8 +251,19 @@ export async function deactivateAdminForms(): Promise<void> {
  * 결과 공개 상태로 변경
  * @param formId 폼 ID
  */
-export async function openAdminFormResult(formId: number): Promise<void> {
-  await apiClient.patch(`/api/admin/forms/${formId}/result-open`);
+export async function openAdminFormResult(
+  formId: number,
+): Promise<AdminFormResultOpenResponse> {
+  const res = await apiClient.patch<AdminFormResultOpenResponse>(
+    `/api/admin/forms/${formId}/result-open`,
+    { resultOpen: true },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+  return res.data;
 }
 
 // ============================================================================
