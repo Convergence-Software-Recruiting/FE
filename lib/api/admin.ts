@@ -204,7 +204,7 @@ export async function updateAdminQuestion(
   questionId: number,
   payload: AdminQuestionUpdateRequest,
 ): Promise<AdminQuestionResponse> {
-  const res = await apiClient.put<AdminQuestionResponse>(
+  const res = await apiClient.patch<AdminQuestionResponse>(
     `/api/admin/questions/${questionId}`,
     payload,
   );
