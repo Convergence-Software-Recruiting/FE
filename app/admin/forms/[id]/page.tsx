@@ -293,8 +293,15 @@ export default function AdminFormDetailPage() {
     setIsResultUpdating(true);
     setActionError(null);
     try {
-      await openAdminFormResult(form.id);
-      await loadForm();
+      const result = await openAdminFormResult(form.id);
+      setForm((prev) =>
+        prev
+          ? {
+              ...prev,
+              resultOpen: result.resultOpen,
+            }
+          : prev,
+      );
     } catch (err) {
       const axiosError = err as AxiosError<{ message?: string }>;
       const message =
@@ -305,7 +312,7 @@ export default function AdminFormDetailPage() {
     } finally {
       setIsResultUpdating(false);
     }
-  }, [form, loadForm]);
+  }, [form]);
 
   const handleDeleteForm = useCallback(async () => {
     if (!form) return;
