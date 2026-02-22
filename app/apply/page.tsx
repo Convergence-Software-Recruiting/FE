@@ -536,7 +536,7 @@ function PersonalInfoSection({
           required
           value={personalInfo.studentNo}
           onChange={(e) => onChange("studentNo", e.target.value)}
-          placeholder="학번을 입력하세요 (예: 202312345)"
+          placeholder="학번을 입력하세요 (예: 60241234)"
           className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 placeholder-navy-500 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
         />
       </div>
@@ -552,7 +552,7 @@ function PersonalInfoSection({
           required
           value={personalInfo.birthDate}
           onChange={(e) => onChange("birthDate", e.target.value)}
-          placeholder="YYYY-MM-DD"
+          placeholder="숫자만 입력 (예: 20041213)"
           inputMode="numeric"
           pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
           maxLength={10}
@@ -632,7 +632,7 @@ function PersonalInfoSection({
           required
           value={personalInfo.phone}
           onChange={(e) => onChange("phone", e.target.value)}
-          placeholder="전화번호를 입력하세요 (예: 010-1234-5678)"
+          placeholder="숫자만 입력 (예: 01012345678)"
           className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 placeholder-navy-500 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
         />
       </div>
@@ -753,10 +753,14 @@ function QuestionsSection({
             required={question.required}
             value={answers[question.id] || ""}
             onChange={(e) => onChange(question.id, e.target.value)}
+            maxLength={1000}
             className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 placeholder-navy-500 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent resize-none"
             rows={4}
             placeholder="답변을 입력해주세요"
           />
+          <p className="mt-2 text-right text-xs sm:text-sm text-white/70">
+            {(answers[question.id] || "").length}/1000
+          </p>
         </div>
       ))}
     </div>
