@@ -37,18 +37,11 @@ interface PersonalInfo {
 }
 
 const MAJOR_OPTIONS = [
-  { value: "CONVERGENCE_SOFTWARE_UNDERGRAD", label: "융합소프트웨어 학부(학부생)" },
+  { value: "CONVERGENCE_SOFTWARE", label: "융합소프트웨어학부" },
   { value: "APPLIED_SOFTWARE", label: "응용소프트웨어전공" },
-  { value: "DATA_SCIENCE", label: "데이터사이언스 전공" },
-  { value: "AI", label: "AI 전공" },
+  { value: "DATA_SCIENCE", label: "데이터사이언스전공" },
+  { value: "ARTIFICIAL_INTELLIGENCE", label: "AI 전공" },
 ] as const;
-
-const MAJOR_TO_API: Record<string, string> = {
-  CONVERGENCE_SOFTWARE_UNDERGRAD: "CONVERGENCE_SOFTWARE",
-  APPLIED_SOFTWARE: "CONVERGENCE_SOFTWARE",
-  DATA_SCIENCE: "CONVERGENCE_SOFTWARE",
-  AI: "CONVERGENCE_SOFTWARE",
-};
 
 const GENDER_OPTIONS = [
   { value: "MALE", label: "남성" },
@@ -271,7 +264,7 @@ export default function ApplyPage() {
         studentNo: personalInfo.studentNo.trim(),
         birthDate: personalInfo.birthDate,
         gender: personalInfo.gender,
-        major: MAJOR_TO_API[personalInfo.major] ?? "CONVERGENCE_SOFTWARE",
+        major: personalInfo.major,
         grade: personalInfo.grade,
         phone: personalInfo.phone.trim(),
         firstChoice: personalInfo.firstChoice,
