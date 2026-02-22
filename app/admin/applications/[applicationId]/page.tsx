@@ -13,6 +13,7 @@ import { LoadingState } from '@/components/ui/loading-state';
 import { ErrorState } from '@/components/ui/error-state';
 import {
   fetchAdminApplicationDetail,
+  fetchAdminFormDetail,
   updateAdminApplicationMemo,
   updateAdminApplicationStatus,
   type AdminApplicationDetail,
@@ -49,6 +50,53 @@ function getStatusBadgeClass(status: string): string {
   }
 }
 
+function formatMajor(major: string): string {
+  switch (major) {
+    case 'CONVERGENCE_SOFTWARE':
+      return '융합소프트웨어학부';
+    case 'APPLIED_SOFTWARE':
+      return '응용소프트웨어전공';
+    case 'DATA_SCIENCE':
+      return '데이터사이언스전공';
+    case 'ARTIFICIAL_INTELLIGENCE':
+      return 'AI 전공';
+    default:
+      return major;
+  }
+}
+
+function formatGrade(grade: string): string {
+  switch (grade) {
+    case 'GRADE_1':
+      return '1학년';
+    case 'GRADE_2':
+      return '2학년';
+    case 'GRADE_3':
+      return '3학년';
+    case 'GRADE_4':
+      return '4학년';
+    default:
+      return grade;
+  }
+}
+
+function formatDepartment(department: string): string {
+  switch (department) {
+    case 'PLANNING':
+      return '기획국';
+    case 'EXTERNAL_COOPERATION':
+      return '대외협력국';
+    case 'WELFARE':
+      return '복지국';
+    case 'SECRETARIAT':
+      return '사무국';
+    case 'PUBLIC_RELATIONS':
+      return '홍보국';
+    default:
+      return department;
+  }
+}
+
 export default function AdminApplicationDetailPage() {
   const params = useParams<{ applicationId: string }>();
   const applicationId = Number(params.applicationId);
@@ -59,6 +107,7 @@ export default function AdminApplicationDetailPage() {
   const [application, setApplication] = useState<AdminApplicationDetail | null>(
     null,
   );
+  const [questionLabels, setQuestionLabels] = useState<Record<number, string>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -79,7 +128,22 @@ export default function AdminApplicationDetailPage() {
       try {
         setIsLoading(true);
         setError(null);
+        setQuestionLabels({});
         const data = await fetchAdminApplicationDetail(applicationId);
+        let labels: Record<number, string> = {};
+        try {
+          const formDetail = await fetchAdminFormDetail(data.formId);
+          labels = formDetail.questions.reduce<Record<number, string>>(
+            (acc, question) => {
+              acc[question.id] = question.label;
+              return acc;
+            },
+            {},
+          );
+        } catch (labelError) {
+          console.error('[AdminApplicationDetailPage] 질문 라벨 조회 실패:', labelError);
+        }
+        setQuestionLabels(labels);
         setApplication(data);
         setStatus(data.status);
         setAdminMemo(data.adminMemo ?? '');
@@ -286,8 +350,7 @@ export default function AdminApplicationDetailPage() {
                     지원서 상세
                   </h1>
                   <p className="text-white/80 text-sm sm:text-base mt-1">
-                    ID {application.applicationId} · 제출 시각{' '}
-                    {formatDateTime(application.submittedAt)}
+                    제출 시각 {formatDateTime(application.submittedAt)}
                   </p>
                   <div className="flex flex-wrap items-center gap-2">
                     <span
@@ -338,15 +401,33 @@ export default function AdminApplicationDetailPage() {
                   </div>
                   <div className="flex justify-between gap-4">
                     <dt className="text-white/70 w-24">전공</dt>
-                    <dd className="text-white/90">{application.major}</dd>
+                    <dd className="text-white/90">{formatMajor(application.major)}</dd>
                   </div>
                   <div className="flex justify-between gap-4">
                     <dt className="text-white/70 w-24">학년</dt>
-                    <dd className="text-white/90">{application.grade}</dd>
+                    <dd className="text-white/90">{formatGrade(application.grade)}</dd>
                   </div>
                   <div className="flex justify-between gap-4">
                     <dt className="text-white/70 w-24">전화번호</dt>
                     <dd className="text-white/90">{application.phone}</dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-white/70 w-24">1지망</dt>
+                    <dd className="text-white/90">
+                      {formatDepartment(application.firstChoice)}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-white/70 w-24">2지망</dt>
+                    <dd className="text-white/90">
+                      {formatDepartment(application.secondChoice)}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-white/70 w-24">3지망</dt>
+                    <dd className="text-white/90">
+                      {formatDepartment(application.thirdChoice)}
+                    </dd>
                   </div>
                   <div className="flex justify-between gap-4 items-start sm:items-center">
                     <dt className="text-white/70 w-24">상태</dt>
@@ -451,7 +532,9 @@ export default function AdminApplicationDetailPage() {
                       className="bg-white/5 rounded-2xl border border-white/10 p-4 sm:p-5"
                     >
                       <p className="text-white/70 text-xs sm:text-sm mb-1">
-                        질문 ID {answer.questionId}
+                        {questionLabels[answer.questionId]
+                          ? questionLabels[answer.questionId]
+                          : `질문 ID ${answer.questionId}`}
                       </p>
                       <p className="text-white text-sm sm:text-base whitespace-pre-line">
                         {answer.value}
@@ -467,4 +550,3 @@ export default function AdminApplicationDetailPage() {
     </BackgroundPattern>
   );
 }
-

@@ -93,6 +93,9 @@ export interface AdminApplicationDetail {
   major: string;
   grade: string;
   phone: string;
+  firstChoice: string; // Department enum
+  secondChoice: string; // Department enum
+  thirdChoice: string; // Department enum
   status: string;
   adminMemo: string | null;
   submittedAt: string;

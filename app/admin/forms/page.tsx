@@ -402,7 +402,7 @@ export default function AdminFormsPage() {
                         <div className="flex flex-col sm:flex-row gap-3">
                           <Link href={`/admin/forms/${form.id}`}>
                             <Button variant="hero" size="lg" className="shadow-xl">
-                              질문 관리
+                              폼/질문 설정
                             </Button>
                           </Link>
                           <Button

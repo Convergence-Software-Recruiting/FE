@@ -39,6 +39,36 @@ function formatStatus(status: string): string {
   }
 }
 
+function formatMajor(major: string): string {
+  switch (major) {
+    case 'CONVERGENCE_SOFTWARE':
+      return '융합소프트웨어학부';
+    case 'APPLIED_SOFTWARE':
+      return '응용소프트웨어전공';
+    case 'DATA_SCIENCE':
+      return '데이터사이언스전공';
+    case 'ARTIFICIAL_INTELLIGENCE':
+      return 'AI 전공';
+    default:
+      return major;
+  }
+}
+
+function formatGrade(grade: string): string {
+  switch (grade) {
+    case 'GRADE_1':
+      return '1학년';
+    case 'GRADE_2':
+      return '2학년';
+    case 'GRADE_3':
+      return '3학년';
+    case 'GRADE_4':
+      return '4학년';
+    default:
+      return grade;
+  }
+}
+
 export default function AdminApplicationsPage() {
   const { isMobile, isTablet } = useResponsive();
   const { admin, isLoading: isAuthLoading, error: authError } = useAuth();
@@ -263,7 +293,7 @@ export default function AdminApplicationsPage() {
                             {app.name}
                           </p>
                           <p className="text-white/70 text-xs">
-                            {app.studentNo} · {app.major} · {app.grade}
+                            {app.studentNo} · {formatMajor(app.major)} · {formatGrade(app.grade)}
                           </p>
                         </div>
                         <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/80">
@@ -291,7 +321,6 @@ export default function AdminApplicationsPage() {
                   <table className="min-w-full divide-y divide-white/10">
                     <thead>
                       <tr className="text-left text-xs sm:text-sm text-white/70">
-                        <th className="px-3 py-2">ID</th>
                         <th className="px-3 py-2">이름</th>
                         <th className="px-3 py-2">학번</th>
                         <th className="px-3 py-2">전공</th>
@@ -304,17 +333,16 @@ export default function AdminApplicationsPage() {
                     <tbody className="divide-y divide-white/10">
                       {sortedApplications.map((app) => (
                         <tr key={app.applicationId} className="text-xs sm:text-sm">
-                          <td className="px-3 py-3 text-white/80">
-                            {app.applicationId}
-                          </td>
                           <td className="px-3 py-3 text-white">{app.name}</td>
                           <td className="px-3 py-3 text-white/80">
                             {app.studentNo}
                           </td>
                           <td className="px-3 py-3 text-white/80">
-                            {app.major}
+                            {formatMajor(app.major)}
                           </td>
-                          <td className="px-3 py-3 text-white/80">{app.grade}</td>
+                          <td className="px-3 py-3 text-white/80">
+                            {formatGrade(app.grade)}
+                          </td>
                           <td className="px-3 py-3">
                             <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/80">
                               {formatStatus(app.status)}
@@ -345,4 +373,3 @@ export default function AdminApplicationsPage() {
     </BackgroundPattern>
   );
 }
-
