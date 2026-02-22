@@ -97,6 +97,17 @@ function formatDepartment(department: string): string {
   }
 }
 
+function formatGender(gender: string): string {
+  switch (gender) {
+    case 'MALE':
+      return '남성';
+    case 'FEMALE':
+      return '여성';
+    default:
+      return gender;
+  }
+}
+
 export default function AdminApplicationDetailPage() {
   const params = useParams<{ applicationId: string }>();
   const applicationId = Number(params.applicationId);
@@ -410,6 +421,22 @@ export default function AdminApplicationDetailPage() {
                   <div className="flex justify-between gap-4">
                     <dt className="text-white/70 w-24">전화번호</dt>
                     <dd className="text-white/90">{application.phone}</dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-white/70 w-24">생년월일</dt>
+                    <dd className="text-white/90">{application.birthDate}</dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-white/70 w-24">성별</dt>
+                    <dd className="text-white/90">
+                      {formatGender(application.gender)}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-white/70 w-24">결과코드</dt>
+                    <dd className="text-white/90 font-mono">
+                      {application.resultCode}
+                    </dd>
                   </div>
                   <div className="flex justify-between gap-4">
                     <dt className="text-white/70 w-24">1지망</dt>

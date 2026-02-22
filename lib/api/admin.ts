@@ -82,7 +82,10 @@ export interface AdminApplicationSummary {
 
 export interface AdminApplicationAnswer {
   questionId: number;
+  orderNo?: number;
+  label?: string;
   value: string;
+  required?: boolean;
 }
 
 export interface AdminApplicationDetail {
@@ -96,6 +99,9 @@ export interface AdminApplicationDetail {
   firstChoice: string; // Department enum
   secondChoice: string; // Department enum
   thirdChoice: string; // Department enum
+  birthDate: string; // yyyy-MM-dd
+  gender: string; // Gender enum
+  resultCode: string;
   status: string;
   adminMemo: string | null;
   submittedAt: string;
