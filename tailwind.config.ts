@@ -70,6 +70,9 @@ const config: Config = {
         "gradient-footer":
           "linear-gradient(to bottom right, #1a237e 0%, #283593 30%, #3949ab 60%, #5c6bc0 100%)",
       },
+      gridTemplateColumns: {
+        '14': 'repeat(14, minmax(0, 1fr))',
+      },
       animation: {
         "fade-up": "fadeUp 0.6s ease-out forwards",
         "fade-in": "fadeIn 0.5s ease-out forwards",
