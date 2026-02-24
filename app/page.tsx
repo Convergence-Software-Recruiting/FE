@@ -1,84 +1,17 @@
 "use client";
 
-import { useState, useCallback } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useResponsive } from "@/hooks/useResponsive";
 import { gradientFooter } from "@/lib/constants/colors";
-import {
-  fetchApplicationResult,
-  type ApplicationResultResponse,
-} from "@/lib/api/application";
-import {
-  ArrowRight,
-  Shield,
-  Search,
-  Loader2,
-  Lock,
-} from "lucide-react";
-import type { AxiosError } from "axios";
-
-const RESULT_LOOKUP_ENABLED = true;
-const RESULT_CODE_REGEX = /^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{4}$/;
-
-function normalizeResultCode(value: string): string {
-  return value
-    .trim()
-    .toUpperCase()
-    .replace(/[^ABCDEFGHJKMNPQRSTUVWXYZ23456789]/g, "")
-    .slice(0, 4);
-}
+import { ArrowRight, Package } from "lucide-react";
 
 export default function Home() {
   const { isMobile, isTablet } = useResponsive();
-  const [resultCode, setResultCode] = useState("");
-  const [resultLoading, setResultLoading] = useState(false);
-  const [result, setResult] = useState<ApplicationResultResponse | null>(null);
-  const [resultError, setResultError] = useState<string | null>(null);
-
-  const handleResultLookup = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      if (!RESULT_LOOKUP_ENABLED) return;
-      const code = normalizeResultCode(resultCode);
-      if (!RESULT_CODE_REGEX.test(code)) {
-        setResultError(
-          "결과 조회 코드는 영문/숫자 4자리입니다. (I, L, O, 0, 1 제외)",
-        );
-        setResult(null);
-        return;
-      }
-      setResultLoading(true);
-      setResultError(null);
-      setResult(null);
-      try {
-        const data = await fetchApplicationResult({ resultCode: code });
-        setResult(data);
-      } catch (err) {
-        const axiosError = err as AxiosError<{ message?: string }>;
-        const status = axiosError.response?.status;
-        const serverMessage = (axiosError.response?.data as { message?: string })?.message;
-
-        if (status === 403) {
-          setResultError("아직 결과 공개 전입니다.");
-        } else if (status === 404) {
-          setResultError("결과 코드를 다시 확인해주세요.");
-        } else if (status === 409) {
-          setResultError("결과가 아직 확정되지 않았습니다.");
-        } else if (status === 400) {
-          setResultError(serverMessage || "결과 조회 코드 형식을 확인해주세요.");
-        } else {
-          setResultError(serverMessage || "결과 조회에 실패했습니다.");
-        }
-      } finally {
-        setResultLoading(false);
-      }
-    },
-    [resultCode],
-  );
 
   return (
     <>
+      {/* ── 히어로 ─────────────────────────────────────────── */}
       <section className="relative min-h-screen flex items-center justify-center bg-gradient-hero overflow-hidden">
         <div
           className="absolute inset-0 opacity-90"
@@ -155,7 +88,7 @@ export default function Home() {
               <span
                 className={`text-white font-semibold ${
                   isMobile ? "text-xs" : "text-sm"
-                }`}
+                } animate-pulse`}
               >
                 2026학년도 신입부원 모집 중
               </span>
@@ -164,10 +97,10 @@ export default function Home() {
             <h1
               className={`font-extrabold text-white mb-4 sm:mb-6 animate-fade-up [animation-delay:200ms] leading-tight ${
                 isMobile
-                  ? "text-3xl"
+                  ? "text-2xl"
                   : isTablet
-                    ? "text-4xl sm:text-5xl md:text-6xl"
-                    : "text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+                    ? "text-3xl sm:text-4xl md:text-5xl"
+                    : "text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
               }`}
             >
               융합소프트웨어
@@ -180,10 +113,10 @@ export default function Home() {
             <p
               className={`text-white/90 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-up [animation-delay:300ms] font-light ${
                 isMobile
-                  ? "text-base px-2"
+                  ? "text-sm px-2"
                   : isTablet
-                    ? "text-lg sm:text-xl"
-                    : "text-xl sm:text-2xl"
+                    ? "text-base sm:text-lg"
+                    : "text-lg sm:text-xl"
               }`}
             >
               명지대학교 융합소프트웨어학부의 변화를 이끄는 학생 자치
@@ -195,50 +128,42 @@ export default function Home() {
             </p>
 
             <div
-              className={`flex items-center justify-center gap-3 sm:gap-4 animate-fade-up [animation-delay:400ms] ${
-                isMobile ? "flex-col w-full px-4" : "flex-col sm:flex-row"
-              }`}
+              className={`flex flex-col items-stretch justify-center gap-3 sm:gap-4 px-4 max-w-md mx-auto animate-fade-up [animation-delay:400ms]`}
             >
               <Link
                 href="/about"
-                className={`inline-block transition-transform duration-200 hover:scale-[1.02] ${isMobile ? "w-full" : ""}`}
+                className="inline-block w-full transition-transform duration-200 hover:scale-[1.02]"
               >
                 <Button
                   variant="hero"
                   size={isMobile ? "lg" : "xl"}
-                  className={`group shadow-2xl ${isMobile ? "w-full" : ""}`}
+                  className="group shadow-2xl w-full"
                 >
                   비대위 알아보기
-                  <ArrowRight
-                    className={`transition-transform group-hover:translate-x-1 ${
-                      isMobile ? "w-4 h-4" : "w-5 h-5"
-                    }`}
-                  />
                 </Button>
               </Link>
               <Link
-                href="/apply"
-                className={`inline-block transition-transform duration-200 hover:scale-[1.02] ${isMobile ? "w-full" : ""}`}
+                href="/locker"
+                className="inline-block w-full transition-transform duration-200 hover:scale-[1.02]"
               >
                 <Button
                   variant="heroOutline"
                   size={isMobile ? "lg" : "xl"}
-                  className={`shadow-xl ${isMobile ? "w-full" : ""}`}
+                  className="shadow-xl w-full"
                 >
-                  지원하기
+                  사물함 대여 서비스
                 </Button>
               </Link>
               <Link
-                href="/admin"
-                className={`inline-block transition-transform duration-200 hover:scale-[1.02] ${isMobile ? "w-full" : ""}`}
+                href="/apply"
+                className="inline-block w-full transition-transform duration-200 hover:scale-[1.02]"
               >
                 <Button
-                  variant="ghost"
+                  variant="heroOutline"
                   size={isMobile ? "lg" : "xl"}
-                  className={`text-white/80 hover:text-white hover:bg-white/10 ${isMobile ? "w-full" : ""}`}
+                  className="shadow-xl w-full"
                 >
-                  <Shield className="w-5 h-5" />
-                  관리자 기능
+                  지원하기
                 </Button>
               </Link>
             </div>
@@ -263,127 +188,6 @@ export default function Home() {
         )}
       </section>
 
-      <section
-        className={`bg-gradient-to-b from-navy-900 to-navy-800 border-y border-navy-700 relative overflow-hidden ${
-          isMobile ? "py-12" : "py-16"
-        }`}
-      >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-xl mx-auto">
-            <div className="text-center mb-6 sm:mb-8">
-              {RESULT_LOOKUP_ENABLED ? (
-                <Search
-                  className={`text-gold-400 mx-auto mb-3 ${
-                    isMobile ? "w-10 h-10" : "w-12 h-12"
-                  }`}
-                />
-              ) : (
-                <Lock
-                  className={`text-white/50 mx-auto mb-3 ${
-                    isMobile ? "w-10 h-10" : "w-12 h-12"
-                  }`}
-                />
-              )}
-              <h2
-                className={`font-bold text-white mb-2 ${
-                  isMobile ? "text-xl sm:text-2xl" : "text-2xl sm:text-3xl"
-                }`}
-              >
-                지원 결과 조회
-              </h2>
-              {RESULT_LOOKUP_ENABLED ? (
-                <p className="text-white/70 text-sm sm:text-base">
-                  제출 시 발급받은 4자리 결과 코드로 합격 여부를 조회할 수
-                  있습니다. 결과 공개 이후에만 조회 가능합니다.
-                </p>
-              ) : (
-                <p className="text-white/70 text-sm sm:text-base">
-                  지금은 결과 조회 기간이 아닙니다. 결과 공개 후 조회
-                  가능합니다.
-                </p>
-              )}
-            </div>
-            <form
-              onSubmit={handleResultLookup}
-              className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-4 sm:p-6"
-            >
-              <div className="flex flex-col sm:flex-row gap-3">
-                <input
-                  type="text"
-                  value={resultCode}
-                  onChange={(e) => setResultCode(normalizeResultCode(e.target.value))}
-                  placeholder="예: A4K3"
-                  maxLength={4}
-                  className="flex-1 px-4 py-3 rounded-xl bg-white/90 text-navy-900 placeholder-navy-500 border border-white/20 focus:outline-none focus:ring-2 focus:ring-gold-400 font-mono text-center text-lg disabled:opacity-60 disabled:cursor-not-allowed"
-                  disabled={resultLoading || !RESULT_LOOKUP_ENABLED}
-                />
-                <Button
-                  type="submit"
-                  variant="hero"
-                  size={isMobile ? "lg" : "xl"}
-                  disabled={resultLoading || !RESULT_LOOKUP_ENABLED}
-                  className="sm:min-w-[120px] opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {resultLoading ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : (
-                    <>
-                      <Search className="w-5 h-5 sm:mr-1" />
-                      조회
-                    </>
-                  )}
-                </Button>
-              </div>
-              {resultError && RESULT_LOOKUP_ENABLED && (
-                <p className="mt-3 text-red-300 text-sm">{resultError}</p>
-              )}
-            </form>
-            {RESULT_LOOKUP_ENABLED && result && (
-              <div
-                className={`mt-6 rounded-2xl border border-white/10 border-l-4 ${
-                  ["ACCEPTED", "합격", "PASS"].includes(
-                    (result.status ?? "").toUpperCase(),
-                  )
-                    ? "border-l-emerald-400 bg-white/10"
-                    : ["REJECTED", "불합격", "FAIL"].includes(
-                          (result.status ?? "").toUpperCase(),
-                        )
-                      ? "border-l-rose-400 bg-white/5"
-                      : "border-l-white/30 bg-white/5"
-                } backdrop-blur-md shadow-lg p-4 sm:p-6 text-left leading-relaxed`}
-              >
-                {["ACCEPTED", "합격", "PASS"].includes(
-                  (result.status ?? "").toUpperCase(),
-                ) ? (
-                  <>
-                    <p className="text-emerald-300 text-sm sm:text-base">
-                      <span className="font-semibold">{result.name}님</span>, 축하드립니다.
-                    </p>
-                    <p className="mt-2 text-white/90 text-sm sm:text-base">
-                      융합소프트웨어학부 비상대책위원회 모집에 최종 합격하셨습니다.
-                    </p>
-                  </>
-                ) : ["REJECTED", "불합격", "FAIL"].includes(
-                    (result.status ?? "").toUpperCase(),
-                  ) ? (
-                  <>
-                    <p className="text-rose-300 text-sm sm:text-base">
-                      <span className="font-semibold">{result.name}님</span>, 소중한 시간 내어 지원해주셔서 감사합니다.
-                    </p>
-                    <p className="mt-2 text-white/90 text-sm sm:text-base">
-                      아쉽게도 이번 모집에서는 함께하지 못하게 되었습니다.
-                    </p>
-                  </>
-                ) : (
-                  <p className="text-white/90 text-sm sm:text-base">
-                    <span className="font-semibold">{result.name}님</span>, 심사 중입니다.
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
     </>
   );
 }
