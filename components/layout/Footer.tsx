@@ -9,7 +9,7 @@ export default function Footer() {
   const navLinks = [
     { label: "ABOUT", href: "https://www.instagram.com/mju_cow/" },
     { label: "APPLY", href: "https://ddingdong.mju.ac.kr/club/91" },
-    { label: "CONTACT", href: "https://www.instagram.com/frizsbeen/" },
+    { label: "CONTACT", href: "https://www.instagram.com/mju_cow/" },
   ];
 
   return (
