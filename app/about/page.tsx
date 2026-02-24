@@ -20,7 +20,7 @@ import {
   ChevronRight,
   Instagram,
   ExternalLink,
-  Home,
+  ArrowLeft,
 } from "lucide-react";
 
 const INSTAGRAM_URL = "https://www.instagram.com/mju_sw/";
@@ -132,97 +132,91 @@ export default function AboutPage() {
           </div>
         </div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16 sm:py-24">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1
-              className={`font-extrabold text-white mb-4 ${
-                isMobile
-                  ? "text-3xl sm:text-4xl"
-                  : isTablet
-                    ? "text-4xl sm:text-5xl"
-                    : "text-5xl sm:text-6xl"
-              }`}
-            >
-              비대위 알아보기
-            </h1>
-            <p
-              className={`text-white/90 max-w-2xl mx-auto mb-8 ${isMobile ? "text-base" : "text-lg sm:text-xl"}`}
-            >
-              명지대학교 융합소프트웨어학부의 변화를 이끄는 학생 자치
-              기구입니다.
-            </p>
-            <div
-              className={`flex flex-wrap items-center justify-center gap-3 ${isMobile ? "gap-2" : "gap-4"}`}
-            >
-              <a
-                href={INSTAGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 sm:px-5 sm:py-3 text-white hover:bg-white/20 hover:border-white/30 hover:scale-105 transition-all duration-200"
-              >
-                <Instagram className={isMobile ? "w-5 h-5" : "w-6 h-6"} />
-                <span
-                  className={
-                    isMobile ? "text-sm font-medium" : "text-base font-semibold"
-                  }
-                >
-                  @mju_sw
-                </span>
-              </a>
-              <a
-                href={LINKTREE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 sm:px-5 sm:py-3 text-white hover:bg-white/20 hover:border-white/30 hover:scale-105 transition-all duration-200"
-              >
-                <ExternalLink className={isMobile ? "w-5 h-5" : "w-6 h-6"} />
-                <span
-                  className={
-                    isMobile ? "text-sm font-medium" : "text-base font-semibold"
-                  }
-                >
-                  링크트리
-                </span>
-              </a>
+          <div className="max-w-4xl mx-auto">
+            <div className="mb-4 flex justify-start">
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 sm:px-5 sm:py-3 text-white hover:bg-white/20 hover:border-white/30 hover:scale-105 transition-all duration-200"
+                aria-label="메인으로 돌아가기"
+                className="inline-flex items-center justify-center rounded-full bg-white/10 backdrop-blur-sm border border-white/20 w-9 h-9 sm:w-10 sm:h-10 text-white/80 hover:bg-white/20 hover:border-gold-400/70 hover:text-gold-300 transition-all duration-200"
               >
-                <Home className={isMobile ? "w-5 h-5" : "w-6 h-6"} />
-                <span
-                  className={
-                    isMobile ? "text-sm font-medium" : "text-base font-semibold"
-                  }
-                >
-                  메인으로 가기
-                </span>
+                <ArrowLeft className={isMobile ? "w-4 h-4" : "w-5 h-5"} />
               </Link>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section
-        className={`bg-gradient-to-b from-navy-900 to-navy-800 border-b border-navy-700 ${isMobile ? "py-12" : "py-16"}`}
-      >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className={`grid gap-4 sm:gap-6 max-w-5xl mx-auto ${isMobile ? "grid-cols-2" : "grid-cols-2 md:grid-cols-4"}`}
-          >
-            {stats.map((stat, i) => (
+            <div className="text-center">
               <div
-                key={i}
-                className="text-center rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-4 sm:p-6 transition-all duration-200 hover:scale-[1.02] hover:bg-white/10"
+                className={`inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full mb-4 sm:mb-6 animate-fade-up [animation-delay:100ms] shadow-lg ${
+                  isMobile ? "px-3 py-1.5" : "px-5 py-2"
+                }`}
               >
-                <p
-                  className={`font-bold text-gold-400 mb-2 ${isMobile ? "text-2xl" : "text-3xl sm:text-4xl"}`}
+                <span
+                  className={`bg-gold-500 rounded-full animate-pulse ${
+                    isMobile ? "w-2 h-2" : "w-2.5 h-2.5"
+                  }`}
+                />
+                <span
+                  className={`text-white font-semibold ${
+                    isMobile ? "text-xs" : "text-sm"
+                  }`}
                 >
-                  {stat.value}
-                </p>
-                <p className="text-white/80 text-sm sm:text-base">
-                  {stat.label}
-                </p>
+                  ABOUT · 비상대책위원회
+                </span>
               </div>
-            ))}
+              <h1
+                className={`font-extrabold text-white mb-4 animate-fade-up [animation-delay:180ms] ${
+                  isMobile
+                    ? "text-3xl sm:text-4xl"
+                    : isTablet
+                      ? "text-4xl sm:text-5xl"
+                      : "text-5xl sm:text-6xl"
+                }`}
+              >
+                비대위 알아보기
+              </h1>
+              <p
+                className={`text-white/90 max-w-2xl mx-auto mb-8 animate-fade-up [animation-delay:260ms] ${
+                  isMobile ? "text-base" : "text-lg sm:text-xl"
+                }`}
+              >
+                명지대학교 융합소프트웨어학부의 변화를 이끄는 학생 자치
+                기구입니다.
+              </p>
+              <div
+                className={`flex flex-wrap items-center justify-center gap-3 ${
+                  isMobile ? "gap-2" : "gap-4"
+                } animate-fade-up [animation-delay:340ms]`}
+              >
+                <a
+                  href={INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 sm:px-5 sm:py-3 text-white hover:bg-white/20 hover:border-white/30 hover:scale-105 transition-all duration-200"
+                >
+                  <Instagram className={isMobile ? "w-5 h-5" : "w-6 h-6"} />
+                  <span
+                    className={
+                      isMobile ? "text-sm font-medium" : "text-base font-semibold"
+                    }
+                  >
+                    @mju_sw
+                  </span>
+                </a>
+                <a
+                  href={LINKTREE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 sm:px-5 sm:py-3 text-white hover:bg-white/20 hover:border-white/30 hover:scale-105 transition-all duration-200"
+                >
+                  <ExternalLink className={isMobile ? "w-5 h-5" : "w-6 h-6"} />
+                  <span
+                    className={
+                      isMobile ? "text-sm font-medium" : "text-base font-semibold"
+                    }
+                  >
+                    링크트리
+                  </span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -264,12 +258,15 @@ export default function AboutPage() {
             </p>
           </div>
           <div
-            className={`grid gap-6 max-w-6xl mx-auto ${isMobile ? "grid-cols-1" : "md:grid-cols-3"}`}
+            className={`grid gap-6 max-w-6xl mx-auto ${
+              isMobile ? "grid-cols-1" : "md:grid-cols-3"
+            }`}
           >
             {features.map((f, i) => (
               <div
                 key={i}
-                className="rounded-3xl bg-white border-2 border-navy-100 hover:border-gold-400 hover:shadow-xl hover:scale-[1.02] p-6 sm:p-8 transition-all duration-200"
+                className="rounded-3xl bg-white border-2 border-navy-100 hover:border-gold-400 hover:shadow-xl hover:scale-[1.02] p-6 sm:p-8 transition-all duration-200 animate-fade-up"
+                style={{ animationDelay: `${100 + i * 100}ms` }}
               >
                 <div className="rounded-2xl bg-gradient-to-br from-navy-500 to-navy-700 flex items-center justify-center text-white w-14 h-14 mb-4">
                   {f.icon}
@@ -302,12 +299,15 @@ export default function AboutPage() {
               </h2>
             </div>
             <div
-              className={`grid gap-4 sm:gap-6 ${isMobile ? "grid-cols-1 sm:grid-cols-2" : "md:grid-cols-3"}`}
+              className={`grid gap-4 sm:gap-6 ${
+                isMobile ? "grid-cols-1 sm:grid-cols-2" : "md:grid-cols-3"
+              }`}
             >
               {values.map((v, i) => (
                 <div
                   key={i}
-                  className="text-center rounded-2xl bg-gradient-to-br from-navy-50 to-white border border-navy-100 p-6 transition-all duration-200 hover:scale-[1.02] hover:shadow-md"
+                  className="text-center rounded-2xl bg-gradient-to-br from-navy-50 to-white border border-navy-100 p-6 transition-all duration-200 hover:scale-[1.02] hover:shadow-md animate-fade-up"
+                  style={{ animationDelay: `${120 + i * 80}ms` }}
                 >
                   <div className="rounded-full bg-gold-100 flex items-center justify-center text-gold-600 w-14 h-14 mx-auto mb-3">
                     {v.icon}
@@ -344,7 +344,9 @@ export default function AboutPage() {
               </p>
             </div>
             <div
-              className={`grid gap-4 sm:gap-6 ${isMobile ? "grid-cols-1" : "md:grid-cols-3"}`}
+              className={`grid gap-4 sm:gap-6 ${
+                isMobile ? "grid-cols-1" : "md:grid-cols-3"
+              }`}
             >
               <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-100 p-6 sm:p-8 transition-all duration-200 hover:scale-[1.02] hover:shadow-md">
                 <div className="rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 w-14 h-14 mb-4">

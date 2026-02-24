@@ -16,7 +16,7 @@ import {
   type ApplicationSubmitResponse,
   type FormQuestion,
 } from "@/lib/api/application";
-import { FileText, User, Loader2 } from "lucide-react";
+import { FileText, User, Loader2, ArrowLeft } from "lucide-react";
 import type { AxiosError } from "axios";
 
 // ============================================================================
@@ -287,16 +287,22 @@ export default function ApplyPage() {
         setResultCode(response.resultCode);
         setSubmitSuccess(true);
       } catch (err) {
-        const axiosError = err as AxiosError<{ message?: string; errors?: Record<string, string[]> }>;
+        const axiosError = err as AxiosError<{
+          message?: string;
+          errors?: Record<string, string[]>;
+        }>;
         const status = axiosError.response?.status;
-        const data = axiosError.response?.data as { message?: string; errors?: Record<string, string[]> } | undefined;
+        const data = axiosError.response?.data as
+          | { message?: string; errors?: Record<string, string[]> }
+          | undefined;
         const serverMessage = data?.message;
         const errors = data?.errors;
         if (status === 409) {
           setError("이미 지원서를 제출하셨습니다.");
         } else if (status === 400) {
-          const detail = serverMessage
-            || (errors && Object.values(errors).flat().length > 0
+          const detail =
+            serverMessage ||
+            (errors && Object.values(errors).flat().length > 0
               ? Object.values(errors!).flat().join(" ")
               : null);
           setError(detail || "입력 정보를 확인해주세요.");
@@ -372,22 +378,35 @@ export default function ApplyPage() {
         <div className="max-w-3xl mx-auto">
           {/* 헤더 */}
           <div className="text-center mb-8 sm:mb-12">
+            <div className="mb-4 flex justify-start">
+              <button
+                type="button"
+                onClick={() => router.push("/")}
+                aria-label="메인으로 돌아가기"
+                className="inline-flex items-center justify-center rounded-full bg-white/10 border border-white/25 w-9 h-9 sm:w-10 sm:h-10 text-white/80 hover:bg-white/15 hover:border-gold-400/70 hover:text-gold-300 transition-colors duration-200"
+              >
+                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+              </button>
+            </div>
             <FileText
               className={`text-white/80 mx-auto mb-4 animate-fade-up ${
-                isMobile ? "w-12 h-12" : "w-16 h-16"
+                isMobile ? "w-10 h-10" : "w-14 h-14"
               }`}
             />
             <h1
-              className={`font-extrabold text-white mb-4 sm:mb-6 animate-fade-up [animation-delay:100ms] ${
+              className={`font-extrabold text-white mb-2 sm:mb-3 animate-fade-up [animation-delay:100ms] ${
                 isMobile
-                  ? "text-3xl sm:text-4xl"
+                  ? "text-2xl sm:text-3xl"
                   : isTablet
-                    ? "text-4xl sm:text-5xl"
-                    : "text-5xl sm:text-6xl"
+                    ? "text-3xl sm:text-4xl"
+                    : "text-4xl sm:text-5xl"
               }`}
             >
-              {form.title}
+              지원서 작성
             </h1>
+            <p className="text-white/80 text-sm sm:text-base animate-fade-up [animation-delay:160ms]">
+              {form.title}
+            </p>
             {form.description && (
               <p
                 className={`text-white/90 leading-relaxed animate-fade-up [animation-delay:200ms] ${
