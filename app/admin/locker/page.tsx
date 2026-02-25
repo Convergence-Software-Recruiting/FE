@@ -138,7 +138,13 @@ function StatusChangeModal({ locker, onClose, onSuccess }: StatusChangeModalProp
         </div>
 
         <div className="mt-6 flex gap-3">
-          <Button variant="outline" size="lg" onClick={onClose} disabled={isSubmitting} className="flex-1">
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="flex-1 border-white/30 text-white hover:bg-white/10 hover:text-white"
+          >
             취소
           </Button>
           <Button variant="hero" size="lg" onClick={handleSubmit} disabled={isSubmitting} className="flex-1">

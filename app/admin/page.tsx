@@ -162,6 +162,15 @@ export default function AdminPage() {
                     모집 폼 관리
                   </Button>
                 </Link>
+                <Link href="/admin/locker">
+                  <Button
+                    variant="heroOutline"
+                    size={isMobile ? 'lg' : 'xl'}
+                    className="shadow-xl"
+                  >
+                    사물함 관리
+                  </Button>
+                </Link>
                 <Link href="/admin/applications">
                   <Button
                     variant="heroOutline"
