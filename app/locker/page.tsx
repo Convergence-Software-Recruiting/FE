@@ -214,7 +214,7 @@ type ApplyForm = Omit<ApplicationCreateRequest, 'lockerId' | 'grade' | 'major'> 
 };
 
 const inputClass =
-  'w-full rounded-xl border border-white/15 bg-white/8 px-3 py-2.5 text-sm text-white placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-gold-400/50 transition-all duration-150';
+  'w-full rounded-xl border border-white/30 bg-white/95 px-3 py-2.5 text-sm text-navy-900 placeholder:text-navy-500 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-gold-400/60 disabled:bg-white/80 disabled:text-navy-600 transition-all duration-150';
 
 function Field({ label, children, className }: { label: string; children: React.ReactNode; className?: string }) {
   return (
