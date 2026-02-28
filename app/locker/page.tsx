@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { LockerGrid } from '@/components/locker/LockerGrid';
 import { LockerLegend } from '@/components/locker/LockerLegend';
+import { LockerGuideSection, LockerPhotoTooltip } from '@/components/locker/LockerGuideSection';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { gradientFooter } from '@/lib/constants/colors';
@@ -22,7 +23,6 @@ import type {
   Major,
 } from '@/lib/types/locker';
 import {
-  MapPin,
   Package,
   Clock,
   CheckCircle2,
@@ -30,7 +30,6 @@ import {
   AlertTriangle,
   RefreshCw,
   ArrowLeft,
-  Eye,
 } from 'lucide-react';
 
 // ── 모바일 감지 ────────────────────────────────────────────
@@ -500,7 +499,6 @@ export default function LockerPage() {
     depositAccount: string;
     depositAmount: number;
   } | null>(null);
-  const [showLockerPhoto, setShowLockerPhoto] = useState(false);
 
   const loadData = useCallback(async () => {
     try {
@@ -624,21 +622,9 @@ export default function LockerPage() {
                       Locker
                     </span>
                   </h1>
-                  <button
-                    type="button"
-                    onClick={() => setShowLockerPhoto(true)}
-                    aria-label="사물함 실제 사진 보기"
-                    className="inline-flex items-center justify-center rounded-full bg-white/10 border border-white/25 w-8 h-8 text-white/80 hover:bg-white/15 hover:border-gold-400/70 hover:text-gold-300 transition-colors duration-200"
-                  >
-                    <Eye className="w-4 h-4" />
-                  </button>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-white/70">
-                  <div className="flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-gold-400" />
-                    <span>종합관 3층 S1353 앞</span>
-                  </div>
                   {config?.semesterStartDate && (
                     <div className="flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5 text-gold-400" />
@@ -647,6 +633,7 @@ export default function LockerPage() {
                       </span>
                     </div>
                   )}
+                  <LockerPhotoTooltip large />
                 </div>
               </div>
 
@@ -752,6 +739,9 @@ export default function LockerPage() {
         </div>
       </section>
 
+      {/* ── 신청 안내 섹션 ───────────────────────────────────── */}
+      <LockerGuideSection />
+
       {/* ── 모달 / 시트 ─────────────────────────────────────── */}
       {selectedLocker?.status === 'EMPTY' && isApplicationOpen && (
         <ApplyModal locker={selectedLocker} onClose={handleModalClose} onSuccess={handleApplicationSuccess} />
@@ -826,35 +816,6 @@ export default function LockerPage() {
               <Button variant="hero" size="lg" onClick={() => setPaymentNotice(null)} className="w-full">
                 확인했습니다
               </Button>
-            </div>
-          </div>
-        </div>
-      )}
-      {showLockerPhoto && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
-          role="dialog"
-          aria-modal="true"
-          onClick={() => setShowLockerPhoto(false)}
-        >
-          <div
-            className="w-full max-w-2xl rounded-3xl border border-white/15 bg-navy-900 shadow-2xl overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between">
-              <h2 className="text-sm sm:text-base font-bold text-white">
-                사물함 실제 위치 사진
-              </h2>
-              <button
-                type="button"
-                onClick={() => setShowLockerPhoto(false)}
-                className="text-white/60 hover:text-white text-sm"
-              >
-                닫기
-              </button>
-            </div>
-            <div className="p-6 text-center text-white/80 text-sm sm:text-base">
-              실제 사물함 사진을 이 영역에 배치하면 됩니다.
             </div>
           </div>
         </div>
