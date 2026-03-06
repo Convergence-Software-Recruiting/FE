@@ -81,8 +81,7 @@ export default function AboutPage() {
     { id: "3", src: "/activity/sw3.jpeg", alt: "비대위 활동 사진 3" },
     { id: "4", src: "/activity/sw4.jpeg", alt: "비대위 활동 사진 4" },
     { id: "5", src: "/activity/sw5.jpeg", alt: "비대위 활동 사진 5" },
-    { id: "6", src: "/activity/cow1.jpeg", alt: "비대위 활동 사진 6" },
-    { id: "7", src: "/activity/cow2.jpeg", alt: "비대위 활동 사진 7" },
+    { id: "6", src: "/activity/sw6.jpeg", alt: "비대위 활동 사진 6" },
   ];
 
   return (
