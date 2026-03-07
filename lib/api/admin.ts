@@ -76,6 +76,7 @@ export interface AdminApplicationSummary {
   studentNo: string;
   major: string; // e.g. 'CONVERGENCE_SOFTWARE'
   grade: string; // e.g. 'GRADE_1' | 'GRADE_2' | ...
+  firstChoice: string; // Department enum
   status: string; // e.g. 'RECEIVED'
   submittedAt: string;
 }
