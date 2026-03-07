@@ -54,6 +54,23 @@ function formatMajor(major: string): string {
   }
 }
 
+function formatDepartment(department: string): string {
+  switch (department) {
+    case 'PLANNING':
+      return '기획국';
+    case 'EXTERNAL_COOPERATION':
+      return '대외협력국';
+    case 'WELFARE':
+      return '복지국';
+    case 'SECRETARIAT':
+      return '사무국';
+    case 'PUBLIC_RELATIONS':
+      return '홍보국';
+    default:
+      return department;
+  }
+}
+
 function formatGrade(grade: string): string {
   switch (grade) {
     case 'GRADE_1':
@@ -295,6 +312,9 @@ export default function AdminApplicationsPage() {
                           <p className="text-white/70 text-xs">
                             {app.studentNo} · {formatMajor(app.major)} · {formatGrade(app.grade)}
                           </p>
+                          <p className="text-white/60 text-xs">
+                            1지망: {formatDepartment(app.firstChoice)}
+                          </p>
                         </div>
                         <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/80">
                           {formatStatus(app.status)}
@@ -325,6 +345,7 @@ export default function AdminApplicationsPage() {
                         <th className="px-3 py-2">학번</th>
                         <th className="px-3 py-2">전공</th>
                         <th className="px-3 py-2">학년</th>
+                        <th className="px-3 py-2">1지망</th>
                         <th className="px-3 py-2">상태</th>
                         <th className="px-3 py-2">제출 시각</th>
                         <th className="px-3 py-2 text-right">상세</th>
@@ -342,6 +363,9 @@ export default function AdminApplicationsPage() {
                           </td>
                           <td className="px-3 py-3 text-white/80">
                             {formatGrade(app.grade)}
+                          </td>
+                          <td className="px-3 py-3 text-white/80">
+                            {formatDepartment(app.firstChoice)}
                           </td>
                           <td className="px-3 py-3">
                             <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/80">
