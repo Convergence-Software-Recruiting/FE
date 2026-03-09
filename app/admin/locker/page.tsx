@@ -518,7 +518,7 @@ function RentalHistoryPreviewModal({
                       </span>
                     </div>
                     <p className="mt-1 text-xs text-white/60">
-                      {getPhoneLast4(item.renterPhone)} · {item.renterEmail}
+                      {item.renterPhone} · {item.renterEmail}
                     </p>
                     <p className="mt-1 text-xs text-white/60">
                       대여기간: {item.rentalStartDate} ~ {item.rentalEndDate}
