@@ -327,7 +327,7 @@ export default function RentalHistoryPage() {
                             {item.lockerNumber}번
                           </td>
                           <td className="px-4 py-3 text-white">{item.applicantName}</td>
-                          <td className="px-4 py-3 text-white/70">{getPhoneLast4(item.renterPhone)}</td>
+                          <td className="px-4 py-3 text-white/70">{item.renterPhone}</td>
                           <td className="px-4 py-3 whitespace-nowrap text-white/70">
                             {item.rentalStartDate}
                             <span className="mx-1 text-white/30">~</span>
