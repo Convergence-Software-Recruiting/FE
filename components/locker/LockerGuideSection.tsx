@@ -29,7 +29,7 @@ const SUMMARY_STEPS = [
 const NOTICES = [
   "신청 기간 내에만 신청 가능합니다.",
   "기한 내 미입금 시 신청이 자동 취소됩니다.",
-  "신청 과정 중 문제가 발생할 경우, 인스타그램 @mju_sw 로 DM 주세요.",
+  "신청 과정 중 문제가 발생할 경우, 인스타그램 @mju_build 로 DM 주세요.",
 ];
 
 const GUIDE_STEPS: GuideStep[] = [

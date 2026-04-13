@@ -286,7 +286,7 @@ export default function AdminFormsPage() {
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="예: 2026 1학기 비대위 모집 폼"
+                    placeholder="예: 2026 1학기 학생회 모집 폼"
                     className="w-full px-4 py-3 rounded-xl bg-white/90 text-navy-900 placeholder-navy-500 border border-white/30 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent"
                   />
                 </div>

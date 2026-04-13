@@ -23,8 +23,8 @@ import {
   ArrowLeft,
 } from "lucide-react";
 
-const INSTAGRAM_URL = "https://www.instagram.com/mju_sw/";
-const LINKTREE_URL = "https://linktr.ee/mju_sw";
+const INSTAGRAM_URL = "https://www.instagram.com/mju_build";
+const LINKTREE_URL = "https://linktr.ee/mju_build";
 
 export default function AboutPage() {
   const { isMobile, isTablet } = useResponsive();
@@ -76,12 +76,12 @@ export default function AboutPage() {
   ];
 
   const activityImages: ActivityImage[] = [
-    { id: "1", src: "/activity/sw1.jpeg", alt: "비대위 활동 사진 1" },
-    { id: "2", src: "/activity/sw2.jpeg", alt: "비대위 활동 사진 2" },
-    { id: "3", src: "/activity/sw3.jpeg", alt: "비대위 활동 사진 3" },
-    { id: "4", src: "/activity/sw4.jpeg", alt: "비대위 활동 사진 4" },
-    { id: "5", src: "/activity/sw5.jpeg", alt: "비대위 활동 사진 5" },
-    { id: "6", src: "/activity/sw6.jpeg", alt: "비대위 활동 사진 6" },
+    { id: "1", src: "/activity/sw1.jpeg", alt: "학생회 활동 사진 1" },
+    { id: "2", src: "/activity/sw2.jpeg", alt: "학생회 활동 사진 2" },
+    { id: "3", src: "/activity/sw3.jpeg", alt: "학생회 활동 사진 3" },
+    { id: "4", src: "/activity/sw4.jpeg", alt: "학생회 활동 사진 4" },
+    { id: "5", src: "/activity/sw5.jpeg", alt: "학생회 활동 사진 5" },
+    { id: "6", src: "/activity/sw6.jpeg", alt: "학생회 활동 사진 6" },
   ];
 
   return (
@@ -157,7 +157,7 @@ export default function AboutPage() {
                     isMobile ? "text-xs" : "text-sm"
                   }`}
                 >
-                  ABOUT · 비상대책위원회
+                  ABOUT · 학생회
                 </span>
               </div>
               <h1
@@ -169,7 +169,7 @@ export default function AboutPage() {
                       : "text-5xl sm:text-6xl"
                 }`}
               >
-                비대위 알아보기
+                학생회 알아보기
               </h1>
               <p
                 className={`text-white/90 max-w-2xl mx-auto mb-8 animate-fade-up [animation-delay:260ms] ${
@@ -196,7 +196,7 @@ export default function AboutPage() {
                       isMobile ? "text-sm font-medium" : "text-base font-semibold"
                     }
                   >
-                    @mju_sw
+                    @mju_build
                   </span>
                 </a>
                 <a
@@ -250,7 +250,7 @@ export default function AboutPage() {
             <h2
               className={`font-bold text-navy-900 mb-4 ${isMobile ? "text-2xl" : "text-4xl"}`}
             >
-              비대위와 함께하면
+              학생회와 함께하면
             </h2>
             <p className="text-navy-700 max-w-2xl mx-auto">
               단순한 학생회 활동을 넘어, 진정한 성장의 기회를 경험하세요
@@ -335,7 +335,7 @@ export default function AboutPage() {
                 투명하고 청렴한 운영
               </h2>
               <p className="text-navy-600 max-w-2xl mx-auto">
-                비대위는{" "}
+                학생회는{" "}
                 <span className="font-semibold text-emerald-600">
                   토스 모임통장
                 </span>
@@ -408,7 +408,7 @@ export default function AboutPage() {
               지금 바로 지원하세요
             </h2>
             <p className="text-white/90 mb-8 text-base sm:text-lg">
-              비대위와 함께 의미 있는 대학 생활을 만들어가세요.
+              학생회와 함께 의미 있는 대학 생활을 만들어가세요.
             </p>
             <Link
               href="/apply"

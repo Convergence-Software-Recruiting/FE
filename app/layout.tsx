@@ -27,7 +27,7 @@ const pretendard = localFont({
   ],
 });
 
-const siteTitle = "융합소프트웨어 비상대책위원회";
+const siteTitle = "융합소프트웨어학부 학생회";
 const siteDescription =
   "명지대학교 융합소프트웨어학부의 변화를 이끄는 학생 자치 기구";
 

@@ -318,7 +318,7 @@ export default function ServicePage() {
                         지원하기
                       </p>
                       <p className="text-xs sm:text-sm text-white/60 mt-0.5">
-                        비대위 신입부원 모집에 지원서를 제출합니다.
+                        학생회 신입부원 모집에 지원서를 제출합니다.
                       </p>
                     </div>
                   </div>

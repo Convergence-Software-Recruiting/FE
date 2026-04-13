@@ -103,10 +103,10 @@ export default function Home() {
                     : "text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
               }`}
             >
-              융합소프트웨어
+              융합소프트웨어학부
               <br />
               <span className="text-gradient-gold bg-gradient-to-r from-gold-400 via-gold-300 to-gold-500 bg-clip-text text-transparent drop-shadow-lg">
-                비상대책위원회
+                학생회
               </span>
             </h1>
 
@@ -139,7 +139,7 @@ export default function Home() {
                   size={isMobile ? "lg" : "xl"}
                   className="group shadow-2xl w-full"
                 >
-                  비대위 알아보기
+                  학생회 알아보기
                 </Button>
               </Link>
               <Link
