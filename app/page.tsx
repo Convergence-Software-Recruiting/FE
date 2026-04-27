@@ -75,25 +75,6 @@ export default function Home() {
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-5xl mx-auto text-center">
-            <div
-              className={`inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full mb-6 sm:mb-8 animate-fade-up [animation-delay:100ms] shadow-lg ${
-                isMobile ? "px-3 py-1.5" : "px-5 py-2.5"
-              }`}
-            >
-              <span
-                className={`bg-gold-500 rounded-full animate-pulse ${
-                  isMobile ? "w-2 h-2" : "w-2.5 h-2.5"
-                }`}
-              />
-              <span
-                className={`text-white font-semibold ${
-                  isMobile ? "text-xs" : "text-sm"
-                } animate-pulse`}
-              >
-                2026학년도 신입부원 모집 중
-              </span>
-            </div>
-
             <h1
               className={`font-extrabold text-white mb-4 sm:mb-6 animate-fade-up [animation-delay:200ms] leading-tight ${
                 isMobile
